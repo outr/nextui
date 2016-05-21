@@ -1,4 +1,4 @@
-package test
+package com.outr.nextui.desktop
 
 import javafx.application.Application
 import javafx.event.{ActionEvent, EventHandler}
