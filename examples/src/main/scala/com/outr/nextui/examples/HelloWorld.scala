@@ -1,9 +1,9 @@
 package com.outr.nextui.examples
 
-import com.outr.nextui.desktop.JavaFXSupport
+import com.outr.nextui.desktop.JavaFX
 import com.outr.nextui.{Button, Scene, UI}
 
-object HelloNextUI extends UI with JavaFXSupport {
+object HelloWorld extends UI with JavaFX {
   title := "Hello World"
 
   val scene = new Scene
@@ -12,6 +12,6 @@ object HelloNextUI extends UI with JavaFXSupport {
     text := "Say 'Hello World'"
   }
 
-  scene += btn
+  scene.children += btn
   currentScene := scene
 }

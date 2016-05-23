@@ -4,8 +4,8 @@ import sbt._
 object NextUIBuild extends Build {
   import Dependencies._
 
-  lazy val root = Project(id = "root", base = file(".")) aggregate(core, desktop, browser, examples)
-  lazy val core = project("core").withDependencies(scribe.core, scribe.slf4j, metastack.rx)
+  lazy val root = Project(id = "root", base = file(".")).settings(name := "nextui").aggregate(core, desktop, browser, examples)
+  lazy val core = project("core").withDependencies(scribe.core, scribe.slf4j, metastack.rx, powerscala.core)
 
   // Platforms
   lazy val desktop = project("desktop").dependsOn(core)
@@ -85,6 +85,12 @@ object Dependencies {
     private val version = "0.1.6"
 
     val rx = "pl.metastack" %%  "metarx" % version
+  }
+
+  object powerscala {
+    private val version = "2.0.2-SNAPSHOT"
+
+    val core = "org.powerscala" %% "powerscala-core" % version
   }
 
   object scribe {
