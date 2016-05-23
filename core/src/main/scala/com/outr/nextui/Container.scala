@@ -12,7 +12,6 @@ trait Container[C <: Component] extends Component {
       case insert: Insert[C] => None -> Some(insert.element)
       case replace: Replace[C] => Some(replace.reference) -> Some(replace.element)
       case remove: Remove[C] => Some(remove.element) -> None
-      case clear: Clear[C] => None -> None      // TODO: how are we supposed to support this?
     }
     val p = Some(this)
     removed.foreach(_._parent := None)

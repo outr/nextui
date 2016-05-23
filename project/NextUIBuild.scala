@@ -82,7 +82,7 @@ object Details {
 
 object Dependencies {
   object metastack {
-    private val version = "0.1.6"
+    private val version = "0.1.8-SNAPSHOT"
 
     val rx = "pl.metastack" %%  "metarx" % version
   }

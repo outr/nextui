@@ -18,7 +18,11 @@ trait JavaFX {
 
   def initialize(primaryStage: Stage, application: JavaFXApplication): Unit = {
     primaryStage.setTitle(title.get)
-
+    iterator.foreach {
+      case b: Button => println(s"Button: $b")
+      case s: Scene => println(s"Scene: $s")
+      case c => throw new RuntimeException(s"Unsupported component: ${c.getClass.getName}.")
+    }
     primaryStage.show()
   }
 }

@@ -1,12 +1,15 @@
 package com.outr.nextui
 
-import pl.metastack.metarx.{Buffer, Sub}
+import org.powerscala.collection.HierarchicalIterator
+import pl.metastack.metarx.Sub
 
-trait UI {
+trait UI extends Iterable[Component] {
   val currentScene: Sub[Option[Scene]] = Sub(None)
 
   val title: Sub[String] = Sub("")
 
-  // case class Tree[A](h: A, t: List[Tree[A]]) { def flat: List[A] = h :: t.flatMap(_.flat) }
-  // or iterator?
+  def iterator: Iterator[Component] = new HierarchicalIterator[Component](currentScene.get.get, {
+    case container: Container[_] => container.children.iterator
+    case _ => Iterator.empty
+  })
 }
