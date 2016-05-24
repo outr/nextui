@@ -39,7 +39,10 @@ object JavaFXApplication {
 
   def use(): JavaFX = synchronized {
     instance match {
-      case Some(ui) => ui
+      case Some(ui) => {
+        instance = None
+        ui
+      }
       case None => throw new RuntimeException("No UI defined for JavaFX.")
     }
   }
