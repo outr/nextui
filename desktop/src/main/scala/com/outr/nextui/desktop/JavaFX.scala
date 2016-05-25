@@ -1,15 +1,13 @@
 package com.outr.nextui.desktop
 
 import javafx.application.Application
-import javafx.event.EventHandler
-import javafx.scene.layout.StackPane
+import javafx.scene.Scene
 import javafx.stage.Stage
 
-import com.outr.nextui.event.ActionEvent
-import com.outr.nextui.{Button, Component, Screen, UI}
-import pl.metastack.metarx.{ReadStateChannel, Sub}
+import com.outr.nextui.{Component, UI}
+import pl.metastack.metarx.Sub
 
-trait JavaFX {
+trait JavaFX extends JavaFXContainer[Component] {
   this: UI =>
 
   val width: Sub[Double] = Sub[Double](800.0)
@@ -23,34 +21,18 @@ trait JavaFX {
 
   def initialize(primaryStage: Stage, application: JavaFXApplication): Unit = {
     primaryStage.setTitle(title.get)
-    iterator.foreach {
-      case b: Button => {
-        val peer = new javafx.scene.control.Button
-        manage(b.text, (title: String) => peer.setText(title))
-        manage(b.parent, (parentOption: Option[Component]) => {
-          val parent = parentOption.getOrElse(throw new RuntimeException(s"No parent assigned to this component: $b."))
-          val container = parent.peer.getOrElse(throw new RuntimeException(s"No peer defined for $parent."))
-          container.asInstanceOf[javafx.scene.Scene].getRoot.asInstanceOf[javafx.scene.layout.Pane].getChildren.add(peer)
-        })
-        peer.setOnAction(new EventHandler[javafx.event.ActionEvent] {
-          override def handle(event: javafx.event.ActionEvent): Unit = b.events.action := new ActionEvent
-        })
-        b.peer = Some(peer)
-      }
-      case s: Screen => {
-        val peer = new javafx.scene.Scene(new StackPane)
-        s.peer = Some(peer)
-        primaryStage.setScene(peer)
-        primaryStage.setWidth(width.get)
-        primaryStage.setHeight(height.get)
-      }
-      case c => throw new RuntimeException(s"Unsupported component: ${c.getClass.getName}.")
+    val scene = new Scene(peer)
+    primaryStage.setScene(scene)
+    allChildren.foreach { c =>
+      c.asInstanceOf[JavaFXComponent].init() // TODO: verify all are JavaFXComponents
+    }
+    width.attach { d =>
+      primaryStage.setWidth(d)
+    }
+    height.attach { d =>
+      primaryStage.setHeight(d)
     }
     primaryStage.show()
-  }
-
-  def manage[T](channel: ReadStateChannel[T], changed: T => Unit): Unit = {
-    channel.attach(changed)
   }
 }
 

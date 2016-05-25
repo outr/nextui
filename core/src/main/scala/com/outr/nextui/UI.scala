@@ -1,14 +1,12 @@
 package com.outr.nextui
 
-import org.powerscala.collection.HierarchicalIterator
+import com.outr.nextui.util.HierarchicalIterator
 import pl.metastack.metarx.Sub
 
-trait UI extends Iterable[Component] {
-  val currentScreen: Sub[Option[Screen]] = Sub(None)
-
+trait UI extends Container[Component] {
   val title: Sub[String] = Sub("")
 
-  def iterator: Iterator[Component] = new HierarchicalIterator[Component](currentScreen.get.get, {
+  def allChildren: Iterator[Component] = new HierarchicalIterator[Component](this, {
     case container: Container[_] => container.children.iterator
     case _ => Iterator.empty
   })

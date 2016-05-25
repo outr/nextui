@@ -1,15 +1,8 @@
 package com.outr.nextui
 
-import com.outr.nextui.event.ActionEvent
-import pl.metastack.metarx.{Channel, ReadStateChannel, Var}
+import pl.metastack.metarx.{ReadStateChannel, Var}
 
 trait Component {
-  protected[nextui] val _parent = Var[Option[Component]](None)
-  def parent: ReadStateChannel[Option[Component]] = _parent
-
-  protected[nextui] var peer: Option[AnyRef] = None
-
-  object events {
-    lazy val action: Channel[ActionEvent] = Channel[ActionEvent]
-  }
+  protected[nextui] val _parent = Var[Option[Container[_ <: Component]]](None)
+  def parent: ReadStateChannel[Option[Container[_ <: Component]]] = _parent
 }
