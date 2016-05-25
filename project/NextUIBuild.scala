@@ -1,26 +1,16 @@
+import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
 import sbt.Keys._
 import sbt._
 
 object NextUIBuild extends Build {
   import Dependencies._
 
-  lazy val root = Project(id = "root", base = file(".")).settings(name := "nextui").aggregate(core, desktop, browser, examples)
-  lazy val core = project("core").withDependencies(scribe.core, scribe.slf4j, metastack.rx)
-
-  // Platforms
-  lazy val desktop = project("desktop").dependsOn(core)
-  lazy val browser = project("browser").dependsOn(core)
-
-  // Samples / Examples
-  lazy val examples = project("examples").dependsOn(desktop)
-
-  private def project(projectName: String) = Project(id = projectName, base = file(projectName)).settings(
-    name := s"${Details.name}-$projectName",
+  def sharedSettings(projectName: Option[String] = None) = Seq(
+    name := s"${Details.name}${projectName.map(pn => s"-$pn").getOrElse("")}",
     version := Details.version,
     organization := Details.organization,
     scalaVersion := Details.scalaVersion,
     sbtVersion := Details.sbtVersion,
-    fork := true,
     scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature"),
     javaOptions += "-verbose:gc",
     resolvers ++= Seq(
@@ -60,9 +50,47 @@ object NextUIBuild extends Build {
       </developers>
   )
 
-  implicit class EnhancedProject(project: Project) {
-    def withDependencies(modules: ModuleID*) = project.settings(libraryDependencies ++= modules)
-  }
+  lazy val root = project.in(file("."))
+    .aggregate(js, jvm, desktop, browser, examples)
+    .settings(sharedSettings(): _*)
+    .settings(publishArtifact := false)
+  lazy val core = crossProject.in(file("."))
+    .settings(sharedSettings(): _*)
+    .settings(
+      autoAPIMappings := true,
+      apiMappings += (scalaInstance.value.libraryJar -> url(s"http://www.scala-lang.org/api/${scalaVersion.value}/"))
+    )
+    .jsSettings(
+      libraryDependencies ++= Seq(
+        metastack.group %%% metastack.rx % metastack.version,
+        scribe.group %%% scribe.core % scribe.version,
+        scalaTest.group %%% scalaTest.core % scalaTest.version % "test"
+      ),
+      scalaJSStage in Global := FastOptStage
+    )
+    .jvmSettings(
+      libraryDependencies ++= Seq(
+        metastack.group %% metastack.rx % metastack.version,
+        scribe.group %% scribe.core % scribe.version,
+        scalaTest.group %% scalaTest.core % scalaTest.version % "test"
+      )
+    )
+  lazy val js = core.js
+  lazy val jvm = core.jvm
+
+  // Platforms
+  lazy val desktop = project.in(file("desktop"))
+    .settings(sharedSettings(Some("desktop")))
+    .dependsOn(jvm)
+  lazy val browser = project.in(file("browser"))
+    .settings(sharedSettings(Some("browser")))
+    .dependsOn(js)
+
+  // Samples / Examples
+  lazy val examples = project.in(file("examples"))
+    .settings(sharedSettings(Some("examples")))
+    .settings(fork := true)
+    .dependsOn(desktop)
 }
 
 object Details {
@@ -84,16 +112,24 @@ object Details {
 
 object Dependencies {
   object metastack {
-    private val version = "0.1.8-SNAPSHOT"
+    val group = "pl.metastack"
+    val version = "0.1.8-SNAPSHOT"
 
-    val rx = "pl.metastack" %%  "metarx" % version
+    val rx = "metarx"
   }
 
   object scribe {
-    private val group = "com.outr.scribe"
-    private val version = "1.2.2"
+    val group = "com.outr.scribe"
+    val version = "1.2.2"
 
-    val core = group %% "scribe" % version
-    val slf4j = group %% "scribe-slf4j" % version
+    val core = "scribe"
+    val slf4j = "scribe-slf4j"
+  }
+
+  object scalaTest {
+    val group = "org.scalatest"
+    val version = "3.0.0-M16-SNAP4"
+
+    val core = "scalatest"
   }
 }
