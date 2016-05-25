@@ -35,6 +35,8 @@ object NextUIBuild extends Build {
         else
           Some("releases" at nexus + "service/local/staging/deploy/maven2")
     },
+    addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full),
+    libraryDependencies <+= scalaVersion("org.scala-lang" % "scala-reflect" % _),
     publishArtifact in Test := false,
     pomExtra := <url>${Details.url}</url>
       <licenses>

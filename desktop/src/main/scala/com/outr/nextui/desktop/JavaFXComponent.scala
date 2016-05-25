@@ -1,17 +1,14 @@
 package com.outr.nextui.desktop
 
-import com.outr.nextui.Component
+import com.outr.nextui.{Component, Peer}
 
-trait JavaFXComponent {
-  this: Component =>
-
-  def peer: javafx.scene.Node
+trait JavaFXComponent extends javafx.scene.Node with Peer {
+  def component: Component
 
   def init(): Unit = {
-    parent.attach {
+    component.parent.attach {
       case Some(p) => {
-        val container = p.asInstanceOf[JavaFXContainer[Component]]
-        container.peer.getChildren.add(peer)
+        p.peer.asInstanceOf[JavaFXContainer].getChildren.add(this)
       }
       case None => // No parent
     }

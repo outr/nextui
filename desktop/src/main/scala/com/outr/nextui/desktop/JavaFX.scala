@@ -1,14 +1,16 @@
 package com.outr.nextui.desktop
 
 import javafx.application.Application
-import javafx.scene.Scene
+import javafx.scene.{Parent, Scene}
 import javafx.stage.Stage
 
-import com.outr.nextui.{Component, UI}
+import com.outr.nextui.{Button, Component, Peer, UI, UIImplementation}
 import pl.metastack.metarx.Sub
 
-trait JavaFX extends JavaFXContainer[Component] {
-  this: UI =>
+abstract class JavaFX extends JavaFXContainer with UI with UIImplementation {
+  UIImplementation.instance = Some(this)
+
+  override def component: Component = this
 
   val width: Sub[Double] = Sub[Double](800.0)
   val height: Sub[Double] = Sub[Double](600.0)
@@ -21,10 +23,10 @@ trait JavaFX extends JavaFXContainer[Component] {
 
   def initialize(primaryStage: Stage, application: JavaFXApplication): Unit = {
     primaryStage.setTitle(title.get)
-    val scene = new Scene(peer)
+    val scene = new Scene(peer.asInstanceOf[Parent])
     primaryStage.setScene(scene)
     allChildren.foreach { c =>
-      c.asInstanceOf[JavaFXComponent].init() // TODO: verify all are JavaFXComponents
+      c.peer.asInstanceOf[JavaFXComponent].init() // TODO: verify all are JavaFXComponents
     }
     width.attach { d =>
       primaryStage.setWidth(d)
@@ -33,6 +35,12 @@ trait JavaFX extends JavaFXContainer[Component] {
       primaryStage.setHeight(d)
     }
     primaryStage.show()
+  }
+
+  override def peerFor(component: Component): Option[Peer] = component match {
+    case b: Button => Some(new JavaFXButton(b))
+    case fx: JavaFX => Some(fx)
+    case _ => None
   }
 }
 
