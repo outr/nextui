@@ -96,6 +96,7 @@ trait JavaFX extends JavaFXContainer with UIImplementation with Logging {
   override def peerFor(component: Component): Option[Peer[_]] = component match {
     case b: Button => Some(new JavaFXButton(b))
     case i: ImageView => Some(new JavaFXImageView(i))
+    case l: Label => Some(new JavaFXLabel(l))
     case ui: UI => Some(this)
     case c: Container => Some(JavaFXContainer(c))
     case _ => None

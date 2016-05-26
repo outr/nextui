@@ -4,10 +4,11 @@ import com.outr.nextui.UI
 
 object Examples {
   val examples = Vector(
+    HelloWorld,
     ContainerExample,
     EasingExample,
-    HelloWorld,
     ImageExample,
+    LabelExample,
     ScreensExample,
     VirtualSizeExample
   )

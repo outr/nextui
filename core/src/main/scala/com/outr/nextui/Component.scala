@@ -32,6 +32,7 @@ trait Component {
   val rotation: Sub[Double] = Sub(0.0)
 
   val background: Sub[Color] = Sub(Color.Clear)
+  val color: Sub[Color] = Sub(Color.Black)
 }
 
 class SizeElement {

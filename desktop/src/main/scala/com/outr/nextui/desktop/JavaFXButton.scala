@@ -5,8 +5,7 @@ import javafx.event.EventHandler
 import com.outr.nextui.Button
 import com.outr.nextui.event.ActionEvent
 
-class
-JavaFXButton(val component: Button) extends JavaFXComponent {
+class JavaFXButton(val component: Button) extends JavaFXComponent {
   override val impl: javafx.scene.control.Button = new javafx.scene.control.Button
 
   override def initialize(): Unit = {
