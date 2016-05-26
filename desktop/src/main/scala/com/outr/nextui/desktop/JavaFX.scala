@@ -5,15 +5,11 @@ import javafx.scene.Scene
 import javafx.stage.Stage
 
 import com.outr.nextui._
-import pl.metastack.metarx.Sub
 
 trait JavaFX extends JavaFXContainer with UIImplementation {
   this: UI =>
 
   override def component: Component = this
-
-  val width: Sub[Double] = Sub[Double](800.0)
-  val height: Sub[Double] = Sub[Double](600.0)
 
   def main(args: Array[String]): Unit = {
     println("Starting JavaFX...")
@@ -29,12 +25,9 @@ trait JavaFX extends JavaFXContainer with UIImplementation {
       case jfx: JavaFXComponent => jfx.init()
       case c => throw new RuntimeException(s"Component peer is not a JavaFXComponent: $c.")
     }
-    width.attach { d =>
-      primaryStage.setWidth(d)
-    }
-    height.attach { d =>
-      primaryStage.setHeight(d)
-    }
+    doubleBind(width._actual, primaryStage.setWidth, primaryStage.widthProperty())
+    doubleBind(height._actual, primaryStage.setHeight, primaryStage.heightProperty())
+
     primaryStage.show()
   }
 
