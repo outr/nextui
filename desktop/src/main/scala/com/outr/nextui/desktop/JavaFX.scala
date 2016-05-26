@@ -2,11 +2,14 @@ package com.outr.nextui.desktop
 
 import java.net.URL
 import java.util.concurrent.atomic.AtomicBoolean
+import javafx.animation.{Animation, KeyFrame, Timeline}
 import javafx.application.Application
 import javafx.beans.property.ReadOnlyDoubleProperty
 import javafx.beans.value.{ChangeListener, ObservableValue}
+import javafx.event.{ActionEvent, EventHandler}
 import javafx.scene.Scene
 import javafx.stage.Stage
+import javafx.util.Duration
 
 import com.outr.nextui._
 import com.outr.nextui.model.{Image, ImagePeer, Resource, ResourcePeer}
@@ -45,6 +48,20 @@ trait JavaFX extends JavaFXContainer with UIImplementation with Logging {
 
     prefBind(width, primaryStage.setWidth, primaryStage.widthProperty(), scene.getX * 2.0)
     prefBind(height, primaryStage.setHeight, primaryStage.heightProperty(), scene.getY)
+
+    val delay = math.round((1.0 / updateFPS) * 1000.0)
+    val timeline = new Timeline(new KeyFrame(Duration.millis(delay), new EventHandler[ActionEvent] {
+      var previous = System.currentTimeMillis()
+
+      override def handle(event: ActionEvent): Unit = {
+        val current = System.currentTimeMillis()
+        val delta = (current - previous) / 1000.0
+        update(delta)
+        previous = current
+      }
+    }))
+    timeline.setCycleCount(Animation.INDEFINITE)
+    timeline.play()
 
     primaryStage.show()
   }

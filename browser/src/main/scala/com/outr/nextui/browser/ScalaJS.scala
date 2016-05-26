@@ -34,6 +34,15 @@ trait ScalaJS extends JSApp with ScalaJSContainer with UIImplementation with Log
       height._actual := window.innerHeight.toDouble
     }, true)
 
+    val delay = (1.0 / updateFPS) * 1000.0
+    var previous = System.currentTimeMillis()
+    window.setInterval(() => {
+      val current = System.currentTimeMillis()
+      val delta = (current - previous) / 1000.0
+      update(delta)
+      previous = current
+    }, delay)
+
     document.body.appendChild(impl)
   }
 

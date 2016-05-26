@@ -23,6 +23,7 @@ trait ScalaJSComponent extends Peer[Element] {
 
     component.x.attach(d => impl.style.left = s"${d}px")
     component.y.attach(d => impl.style.top = s"${d}px")
+    component.rotation.attach(d => impl.style.transform = s"rotate(${d}deg)")
     updateSize()
     component.width.pref.attach {
       case Some(d) => {

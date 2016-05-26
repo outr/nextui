@@ -28,6 +28,8 @@ trait Component {
     val y: Sub[Double] = Sub(1.0)
   }
 
+  val rotation: Sub[Double] = Sub(0.0)
+
   val background: Sub[Color] = Sub(Color.Clear)
 }
 

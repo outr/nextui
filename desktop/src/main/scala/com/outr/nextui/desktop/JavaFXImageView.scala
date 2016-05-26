@@ -8,7 +8,7 @@ class JavaFXImageView(val component: ImageView) extends JavaFXComponent {
   override def init(): Unit = {
     super.init()
 
-    impl.setSmooth(true)
+//    impl.setSmooth(true)
 
     component.preserveAspectRatio.attach(impl.setPreserveRatio)
     doubleBindOption(component.width.pref, impl.setFitWidth, impl.fitWidthProperty())
