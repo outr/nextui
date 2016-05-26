@@ -1,3 +1,4 @@
+import org.scalajs.sbtplugin.ScalaJSPlugin
 import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
 import sbt.Keys._
 import sbt._
@@ -51,7 +52,7 @@ object NextUIBuild extends Build {
   )
 
   lazy val root = project.in(file("."))
-    .aggregate(js, jvm, desktop, browser, examples)
+    .aggregate(js, jvm, desktop, browser, examplesDesktop)
     .settings(sharedSettings(): _*)
     .settings(publishArtifact := false)
   lazy val core = crossProject.in(file("."))
@@ -62,6 +63,7 @@ object NextUIBuild extends Build {
     )
     .jsSettings(
       libraryDependencies ++= Seq(
+        scalaJs.group %%% scalaJs.dom % scalaJs.version,
         metastack.group %%% metastack.rx % metastack.version,
         scribe.group %%% scribe.core % scribe.version,
         scalaTest.group %%% scalaTest.core % scalaTest.version % "test"
@@ -84,13 +86,18 @@ object NextUIBuild extends Build {
     .dependsOn(jvm)
   lazy val browser = project.in(file("browser"))
     .settings(sharedSettings(Some("browser")))
+    .enablePlugins(ScalaJSPlugin)
     .dependsOn(js)
 
   // Samples / Examples
-  lazy val examples = project.in(file("examples"))
-    .settings(sharedSettings(Some("examples")))
+  lazy val examplesDesktop = project.in(file("examples-desktop"))
+    .settings(sharedSettings(Some("examples-desktop")))
     .settings(fork := true)
     .dependsOn(desktop)
+  lazy val examplesBrowser = project.in(file("examples-browser"))
+    .settings(sharedSettings(Some("examples-browser")))
+    .enablePlugins(ScalaJSPlugin)
+    .dependsOn(browser)
 }
 
 object Details {
@@ -116,6 +123,13 @@ object Dependencies {
     val version = "0.1.8-SNAPSHOT"
 
     val rx = "metarx"
+  }
+
+  object scalaJs {
+    val group = "org.scala-js"
+    val version = "0.9.0"
+
+    val dom = "scalajs-dom"
   }
 
   object scribe {
