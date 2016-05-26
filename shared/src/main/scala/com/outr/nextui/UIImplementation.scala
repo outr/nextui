@@ -1,8 +1,13 @@
 package com.outr.nextui
 
 object UIImplementation {
-  // TODO: better handle
-  var instance: Option[UIImplementation] = None
+  private var instance: Option[UIImplementation] = None
+  private def set(impl: UIImplementation): Unit = synchronized {
+    instance match {
+      case Some(existing) => throw new RuntimeException(s"Implementation already defined: $existing when trying to set: $impl.")
+      case None => instance = Option(impl)
+    }
+  }
 
   def peerFor(component: Component): Peer = {
     val impl = instance.getOrElse(throw new RuntimeException(s"No UIImplementation defined!"))
@@ -11,7 +16,7 @@ object UIImplementation {
 }
 
 trait UIImplementation {
-  UIImplementation.instance = Some(this)
+  UIImplementation.set(this)
 
   def peerFor(component: Component): Option[Peer]
 }
