@@ -3,20 +3,11 @@ package com.outr.nextui.examples.desktop
 import java.util.prefs.Preferences
 
 import com.outr.nextui.desktop.JavaFX
-import com.outr.nextui.examples.{ContainerExample, EasingExample, HelloWorld, ImageExample, ScreensExample, VirtualSizeExample}
+import com.outr.nextui.examples.Examples._
 
 import scala.io.StdIn
 
 object JavaFXExamples {
-  val examples = Vector(
-    ContainerExample,
-    EasingExample,
-    HelloWorld,
-    ImageExample,
-    ScreensExample,
-    VirtualSizeExample
-  )
-
   def main(args: Array[String]): Unit = {
     val keyName = "nextui.javafx.examples.lastRun"
     val preferences = Preferences.userRoot()

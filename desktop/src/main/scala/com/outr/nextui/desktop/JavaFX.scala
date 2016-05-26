@@ -31,7 +31,7 @@ trait JavaFX extends JavaFXContainer with UIImplementation with Logging {
     Application.launch(classOf[JavaFXApplication])
   }
 
-  def initialize(primaryStage: Stage, application: JavaFXApplication): Unit = {
+  def start(primaryStage: Stage, application: JavaFXApplication): Unit = {
     ui.title.attach(primaryStage.setTitle)
     ui.fullScreen.attach(primaryStage.setFullScreen)
     ui.fullScreenExitHint.attach(h => primaryStage.setFullScreenExitHint(h.orNull))
@@ -118,7 +118,7 @@ class JavaFXResource(resource: Resource) extends ResourcePeer {
 class JavaFXApplication extends Application {
   override def start(primaryStage: Stage): Unit = {
     val app = JavaFXApplication.use()
-    app.initialize(primaryStage, this)
+    app.start(primaryStage, this)
   }
 }
 
