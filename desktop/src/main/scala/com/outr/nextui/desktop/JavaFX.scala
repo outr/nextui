@@ -25,8 +25,9 @@ trait JavaFX extends JavaFXContainer with UIImplementation {
     primaryStage.setTitle(title.get)
     val scene = new Scene(node)
     primaryStage.setScene(scene)
-    allChildren.foreach { c =>
-      c.peer.asInstanceOf[JavaFXComponent].init() // TODO: verify all are JavaFXComponents
+    allChildren.map(_.peer).foreach {
+      case jfx: JavaFXComponent => jfx.init()
+      case c => throw new RuntimeException(s"Component peer is not a JavaFXComponent: $c.")
     }
     width.attach { d =>
       primaryStage.setWidth(d)
