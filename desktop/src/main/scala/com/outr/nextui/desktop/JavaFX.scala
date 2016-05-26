@@ -22,7 +22,7 @@ trait JavaFX extends JavaFXContainer with UIImplementation with Logging {
 
   def initialize(primaryStage: Stage, application: JavaFXApplication): Unit = {
     primaryStage.setTitle(title.get)
-    val scene = new Scene(node, width.pref.get, height.pref.get)
+    val scene = new Scene(impl, width.pref.get, height.pref.get)
     primaryStage.setScene(scene)
     allChildren.map(_.peer).foreach {
       case jfx: JavaFXComponent => jfx.init()
@@ -36,7 +36,7 @@ trait JavaFX extends JavaFXContainer with UIImplementation with Logging {
     primaryStage.show()
   }
 
-  override def peerFor(component: Component): Option[Peer] = component match {
+  override def peerFor(component: Component): Option[Peer[_]] = component match {
     case b: Button => Some(new JavaFXButton(b))
     case fx: JavaFX => Some(fx)
     case _ => None

@@ -9,7 +9,7 @@ object UIImplementation {
     }
   }
 
-  def peerFor(component: Component): Peer = {
+  def peerFor(component: Component): Peer[_] = {
     val impl = instance.getOrElse(throw new RuntimeException(s"No UIImplementation defined!"))
     impl.peerFor(component).getOrElse(throw new UnsupportedOperationException(s"Component of type ${component.getClass.getName} is not supported."))
   }
@@ -18,5 +18,5 @@ object UIImplementation {
 trait UIImplementation {
   UIImplementation.set(this)
 
-  def peerFor(component: Component): Option[Peer]
+  def peerFor(component: Component): Option[Peer[_]]
 }

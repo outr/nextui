@@ -3,7 +3,7 @@ package com.outr.nextui
 import pl.metastack.metarx._
 
 trait Component {
-  lazy val peer: Peer = UIImplementation.peerFor(this)
+  lazy val peer: Peer[_] = UIImplementation.peerFor(this)
 
   protected[nextui] val _parent = Var[Option[Container]](None)
 
