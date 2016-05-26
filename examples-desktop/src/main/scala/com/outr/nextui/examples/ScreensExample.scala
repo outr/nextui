@@ -2,7 +2,8 @@ package com.outr.nextui.examples
 
 import com.outr.nextui.desktop._
 import com.outr.nextui.screen.{Screen, Screens}
-import com.outr.nextui.{Button, ImageView, UI}
+import com.outr.nextui.transition._
+import com.outr.nextui.{Button, ImageView, UI, _}
 import org.powerscala.Color
 
 object ScreensExample extends UI with JavaFX {
@@ -11,6 +12,9 @@ object ScreensExample extends UI with JavaFX {
   height := 868.0
 
   background := Color.Azure
+
+  MainScreen.transitionOut := Some(MainScreen.right transitionTo 0.0 in 2.seconds)
+  OtherScreen.transitionIn := Some(function(OtherScreen.left := ui.width.actual) andThen(OtherScreen.left transitionTo 0.0 in 2.seconds))
 
   children += new Button {
     text := "Change Screens"

@@ -23,7 +23,7 @@ object EasingExample extends UI with JavaFX {
       andThen(image.center transitionTo ui.center.get in 1.seconds easing Easing.ElasticOut)
       andThen(image.rotation transitionTo -360.0 in 2.seconds easing Easing.ElasticOut)
       andThen function(image.rotation := 0.0)
-  ).start(ui)
+  ).start()
 
   children += image
 }

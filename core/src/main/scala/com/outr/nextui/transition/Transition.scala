@@ -1,15 +1,15 @@
 package com.outr.nextui.transition
 
-import com.outr.nextui.UI
+import com.outr.nextui._
 
 trait Transition {
   def finished: Boolean
   def init(): Unit
   def invoke(delta: Double): Unit
 
-  def start(context: UI) = context.updates.once {
+  def start() = ui.updates.once {
     var first = true
-    context.updates.until(finished) { delta =>
+    ui.updates.until(finished) { delta =>
       if (first) {
         init()
         first = false
