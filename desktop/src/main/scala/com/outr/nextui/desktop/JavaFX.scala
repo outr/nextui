@@ -25,8 +25,8 @@ trait JavaFX extends JavaFXContainer with UIImplementation {
       case jfx: JavaFXComponent => jfx.init()
       case c => throw new RuntimeException(s"Component peer is not a JavaFXComponent: $c.")
     }
-    doubleBind(width._actual, primaryStage.setWidth, primaryStage.widthProperty())
-    doubleBind(height._actual, primaryStage.setHeight, primaryStage.heightProperty())
+    doubleBind(width._actual, primaryStage.setWidth, primaryStage.widthProperty(), scene.getX * 2.0)
+    doubleBind(height._actual, primaryStage.setHeight, primaryStage.heightProperty(), scene.getY)
 
     primaryStage.show()
   }

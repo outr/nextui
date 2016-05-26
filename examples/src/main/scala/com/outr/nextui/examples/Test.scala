@@ -24,10 +24,17 @@ class Test extends Application {
     group.setTranslateX(50.0)
     group.setTranslateY(50.0)
 
+    val scene = new Scene(root, 300, 250)
+
     val btn = new Button
     btn.setText("Say 'Hello World'")
     btn.setOnAction(new EventHandler[ActionEvent] {
-      override def handle(event: ActionEvent): Unit = println("Hello World!")
+      override def handle(event: ActionEvent): Unit = {
+        println("Hello World!")
+        println(s"Offset: ${scene.getX}x${scene.getY}")
+        primaryStage.setWidth(800 + scene.getX)
+        primaryStage.setHeight(600 + scene.getY)
+      }
     })
     group.getChildren.add(btn)
     root.getChildren.add(group)
@@ -35,7 +42,7 @@ class Test extends Application {
 //    val img = new ImageView(getClass.getClassLoader.getResource("tucker.jpg").toString)
 //    root.getChildren.add(img)
 
-    primaryStage.setScene(new Scene(root, 300, 250))
+    primaryStage.setScene(scene)
     primaryStage.show()
   }
 }
