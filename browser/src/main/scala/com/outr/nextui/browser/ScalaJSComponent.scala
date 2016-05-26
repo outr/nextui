@@ -1,6 +1,7 @@
 package com.outr.nextui.browser
 
 import com.outr.nextui.Peer
+import org.powerscala.Color
 import org.scalajs.dom._
 import org.scalajs.dom.html.Element
 
@@ -36,6 +37,14 @@ trait ScalaJSComponent extends Peer[Element] {
         component.height._actual := d
       }
       case None => // Ignore
+    }
+
+    component.background.attach { c =>
+      if (c != Color.Clear) {
+        impl.style.backgroundColor = Color.toHex(c)
+      } else {
+        impl.style.backgroundColor = ""
+      }
     }
   }
 

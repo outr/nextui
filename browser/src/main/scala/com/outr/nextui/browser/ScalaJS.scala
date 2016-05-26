@@ -41,6 +41,7 @@ trait ScalaJS extends JSApp with ScalaJSContainer with UIImplementation with Log
     case b: Button => Some(new ScalaJSButton(b))
     case i: ImageView => Some(new ScalaJSImageView(i))
     case js: ScalaJS => Some(js)
+    case c: Container => Some(ScalaJSContainer(c))
     case _ => None
   }
 

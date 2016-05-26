@@ -6,52 +6,6 @@ import sbt._
 object NextUIBuild extends Build {
   import Dependencies._
 
-  def sharedSettings(projectName: Option[String] = None) = Seq(
-    name := s"${Details.name}${projectName.map(pn => s"-$pn").getOrElse("")}",
-    version := Details.version,
-    organization := Details.organization,
-    scalaVersion := Details.scalaVersion,
-    sbtVersion := Details.sbtVersion,
-    scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature"),
-    javaOptions += "-verbose:gc",
-    resolvers ++= Seq(
-      Resolver.sonatypeRepo("snapshots"),
-      Resolver.sonatypeRepo("releases"),
-      Resolver.typesafeRepo("releases")
-    ),
-    publishTo <<= version {
-      (v: String) =>
-        val nexus = "https://oss.sonatype.org/"
-        if (v.trim.endsWith("SNAPSHOT"))
-          Some("snapshots" at nexus + "content/repositories/snapshots")
-        else
-          Some("releases" at nexus + "service/local/staging/deploy/maven2")
-    },
-    addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full),
-    libraryDependencies <+= scalaVersion("org.scala-lang" % "scala-reflect" % _),
-    publishArtifact in Test := false,
-    pomExtra := <url>${Details.url}</url>
-      <licenses>
-        <license>
-          <name>${Details.licenseType}</name>
-          <url>${Details.licenseURL}</url>
-          <distribution>repo</distribution>
-        </license>
-      </licenses>
-      <scm>
-        <developerConnection>scm:${Details.repoURL}</developerConnection>
-        <connection>scm:${Details.repoURL}</connection>
-        <url>${Details.projectURL}</url>
-      </scm>
-      <developers>
-        <developer>
-          <id>${Details.developerId}</id>
-          <name>${Details.developerName}</name>
-          <url>${Details.developerURL}</url>
-        </developer>
-      </developers>
-  )
-
   lazy val root = project.in(file("."))
     .aggregate(js, jvm, desktop, browser, examplesDesktop)
     .settings(sharedSettings(): _*)
@@ -102,6 +56,52 @@ object NextUIBuild extends Build {
     .settings(sharedSettings(Some("examples-browser")))
     .enablePlugins(ScalaJSPlugin)
     .dependsOn(browser)
+
+  def sharedSettings(projectName: Option[String] = None) = Seq(
+    name := s"${Details.name}${projectName.map(pn => s"-$pn").getOrElse("")}",
+    version := Details.version,
+    organization := Details.organization,
+    scalaVersion := Details.scalaVersion,
+    sbtVersion := Details.sbtVersion,
+    scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature"),
+    javaOptions += "-verbose:gc",
+    resolvers ++= Seq(
+      Resolver.sonatypeRepo("snapshots"),
+      Resolver.sonatypeRepo("releases"),
+      Resolver.typesafeRepo("releases")
+    ),
+    publishTo <<= version {
+      (v: String) =>
+        val nexus = "https://oss.sonatype.org/"
+        if (v.trim.endsWith("SNAPSHOT"))
+          Some("snapshots" at nexus + "content/repositories/snapshots")
+        else
+          Some("releases" at nexus + "service/local/staging/deploy/maven2")
+    },
+    addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full),
+    libraryDependencies <+= scalaVersion("org.scala-lang" % "scala-reflect" % _),
+    publishArtifact in Test := false,
+    pomExtra := <url>${Details.url}</url>
+      <licenses>
+        <license>
+          <name>${Details.licenseType}</name>
+          <url>${Details.licenseURL}</url>
+          <distribution>repo</distribution>
+        </license>
+      </licenses>
+      <scm>
+        <developerConnection>scm:${Details.repoURL}</developerConnection>
+        <connection>scm:${Details.repoURL}</connection>
+        <url>${Details.projectURL}</url>
+      </scm>
+      <developers>
+        <developer>
+          <id>${Details.developerId}</id>
+          <name>${Details.developerName}</name>
+          <url>${Details.developerURL}</url>
+        </developer>
+      </developers>
+  )
 
   /**
     * Helper function to add unmanaged source compat directories for different scala versions
