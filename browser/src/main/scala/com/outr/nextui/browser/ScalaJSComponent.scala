@@ -13,24 +13,30 @@ trait ScalaJSComponent extends Peer[Element] {
       case None => // No Parent
     }
 
-    if (component.width.pref.get == 0.0) {
-      component.width.pref := impl.offsetWidth
+    if (component.width.pref.get.isEmpty && impl.offsetWidth > 0.0) {
+      component.width.pref := Option(impl.offsetWidth)
     }
-    if (component.height.pref.get == 0.0) {
-      component.height.pref := impl.offsetHeight
+    if (component.height.pref.get.isEmpty && impl.offsetHeight > 0.0) {
+      component.height.pref := Option(impl.offsetHeight)
     }
 
     component.x.attach(d => impl.style.left = s"${d}px")
     component.y.attach(d => impl.style.top = s"${d}px")
     updateSize()
-    component.width.pref.attach(d => if (d != 0.0) {
-      impl.style.width = s"${d}px"
-      component.width._actual := d
-    })
-    component.height.pref.attach(d => if (d != 0.0) {
-      impl.style.height = s"${d}px"
-      component.height._actual := d
-    })
+    component.width.pref.attach {
+      case Some(d) => {
+        impl.style.width = s"${d}px"
+        component.width._actual := d
+      }
+      case None => // Ignore
+    }
+    component.height.pref.attach {
+      case Some(d) => {
+        impl.style.height = s"${d}px"
+        component.height._actual := d
+      }
+      case None => // Ignore
+    }
   }
 
   protected def create[T <: Element](tagName: String): T = {

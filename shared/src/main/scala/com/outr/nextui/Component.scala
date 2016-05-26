@@ -29,5 +29,5 @@ class SizeElement {
   def actual: ReadStateChannel[Double] = _actual
   val min: Sub[Double] = Sub(0.0)
   val max: Sub[Double] = Sub(Double.MaxValue)
-  val pref: Sub[Double] = Sub(0.0)
+  val pref: Sub[Option[Double]] = Sub(None)
 }

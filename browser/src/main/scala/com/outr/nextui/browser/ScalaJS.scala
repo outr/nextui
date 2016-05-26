@@ -9,7 +9,7 @@ import scala.scalajs.js.JSApp
 trait ScalaJS extends JSApp with ScalaJSContainer with UIImplementation with Logging {
   this: UI =>
 
-  override def component: Component = this
+  override val component: Component = this
 
   def main(): Unit = {
     logger.info("Starting ScalaJS Application...")

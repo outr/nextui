@@ -1,6 +1,9 @@
 package com.outr.nextui.desktop
 
+import java.util.concurrent.atomic.AtomicBoolean
 import javafx.application.Application
+import javafx.beans.property.ReadOnlyDoubleProperty
+import javafx.beans.value.{ChangeListener, ObservableValue}
 import javafx.scene.Scene
 import javafx.stage.Stage
 
@@ -26,16 +29,39 @@ trait JavaFX extends JavaFXContainer with UIImplementation with Logging {
       case jfx: JavaFXComponent => jfx.init()
       case c => throw new RuntimeException(s"Component peer is not a JavaFXComponent: $c.")
     }
-    val scene = new Scene(impl, width.pref.get, height.pref.get)
+    val scene = new Scene(impl)
     primaryStage.setScene(scene)
 
-    // TODO: re-evaluate this section to keep proper bindings of `pref`
-    doubleBind(width.pref, primaryStage.setWidth, primaryStage.widthProperty(), scene.getX * 2.0, silent = true)
-    doubleBind(height.pref, primaryStage.setHeight, primaryStage.heightProperty(), scene.getY, silent = true)
-    width.pref.attach(width._actual :=)
-    height.pref.attach(height._actual :=)
+    prefBind(width, primaryStage.setWidth, primaryStage.widthProperty(), scene.getX * 2.0)
+    prefBind(height, primaryStage.setHeight, primaryStage.heightProperty(), scene.getY)
 
     primaryStage.show()
+  }
+
+  protected def prefBind(size: SizeElement,
+                         setter: Double => Unit,
+                         prop: ReadOnlyDoubleProperty,
+                         adjust: => Double = 0.0): Unit = {
+    val changing = new AtomicBoolean(false)
+
+    size.pref.attach {
+      case Some(d) if !changing.get() => setter(d + adjust)
+      case _ => // Ignore
+    }
+
+    prop.addListener(new ChangeListener[Number] {
+      override def changed(observable: ObservableValue[_ <: Number], oldValue: Number, newValue: Number): Unit = {
+        val value = newValue.doubleValue() - adjust
+        if (value != size.actual.get) {
+          changing.set(true)
+          try {
+            size._actual := value
+          } finally {
+            changing.set(false)
+          }
+        }
+      }
+    })
   }
 
   override def peerFor(component: Component): Option[Peer[_]] = component match {

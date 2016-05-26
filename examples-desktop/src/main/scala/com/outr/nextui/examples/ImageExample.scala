@@ -4,6 +4,7 @@ import java.net.URL
 
 import com.outr.nextui.desktop.JavaFX
 import com.outr.nextui.{Button, Image, UI}
+import pl.metastack.metarx._
 
 object ImageExample extends UI with JavaFX {
   title := "Image Example"
@@ -16,14 +17,8 @@ object ImageExample extends UI with JavaFX {
     middle := ui.middle
 
     // Default the window size to be the size of the image when it loads
-    width.actual.attach { d =>
-      logger.info(s"Width changed: $d")
-    }
-    ui.width.pref.attach { d =>
-      logger.info(s"Pref Width Changed: $d")
-    }
-    ui.width.pref := width.actual
-    ui.height.pref := height.actual
+    ui.width.pref := width.actual.map(d => Option(d))
+    ui.height.pref := height.actual.map(d => Option(d))
   }
   val button = new Button {
     text := "Change Image"
