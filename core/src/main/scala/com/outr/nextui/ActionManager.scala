@@ -25,10 +25,10 @@ class ActionManager(name: String) {
     a
   }
 
-  def until(condition: => Boolean)(f: => Unit): Action = {
+  def until(condition: => Boolean)(f: Double => Unit): Action = {
     var action: Action = null
-    action = on {
-      f
+    action = apply { delta =>
+      f(delta)
       if (condition) {
         remove(action)
       }
