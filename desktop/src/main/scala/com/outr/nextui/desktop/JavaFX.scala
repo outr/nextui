@@ -1,14 +1,14 @@
 package com.outr.nextui.desktop
 
 import javafx.application.Application
-import javafx.scene.{Parent, Scene}
+import javafx.scene.Scene
 import javafx.stage.Stage
 
-import com.outr.nextui.{Button, Component, Peer, UI, UIImplementation}
+import com.outr.nextui._
 import pl.metastack.metarx.Sub
 
-abstract class JavaFX extends JavaFXContainer with UI with UIImplementation {
-  UIImplementation.instance = Some(this)
+trait JavaFX extends JavaFXContainer with UIImplementation {
+  this: UI =>
 
   override def component: Component = this
 
@@ -23,7 +23,7 @@ abstract class JavaFX extends JavaFXContainer with UI with UIImplementation {
 
   def initialize(primaryStage: Stage, application: JavaFXApplication): Unit = {
     primaryStage.setTitle(title.get)
-    val scene = new Scene(peer.asInstanceOf[Parent])
+    val scene = new Scene(node)
     primaryStage.setScene(scene)
     allChildren.foreach { c =>
       c.peer.asInstanceOf[JavaFXComponent].init() // TODO: verify all are JavaFXComponents

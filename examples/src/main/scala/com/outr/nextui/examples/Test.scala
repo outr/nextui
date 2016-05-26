@@ -20,13 +20,17 @@ class Test extends Application {
     val root = new Pane
 //    root.setAlignment(Pos.BASELINE_LEFT)
 
+    val group = new Pane
+    group.setTranslateX(50.0)
+    group.setTranslateY(50.0)
+
     val btn = new Button
-    btn.setTranslateX(50.0)
     btn.setText("Say 'Hello World'")
     btn.setOnAction(new EventHandler[ActionEvent] {
       override def handle(event: ActionEvent): Unit = println("Hello World!")
     })
-    root.getChildren.add(btn)
+    group.getChildren.add(btn)
+    root.getChildren.add(group)
 
 //    val img = new ImageView(getClass.getClassLoader.getResource("tucker.jpg").toString)
 //    root.getChildren.add(img)

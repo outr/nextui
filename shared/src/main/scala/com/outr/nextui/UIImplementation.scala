@@ -11,5 +11,7 @@ object UIImplementation {
 }
 
 trait UIImplementation {
+  UIImplementation.instance = Some(this)
+
   def peerFor(component: Component): Option[Peer]
 }

@@ -1,3 +1,5 @@
 package com.outr.nextui.desktop
 
-abstract class JavaFXContainer extends javafx.scene.layout.Pane with JavaFXComponent
+trait JavaFXContainer extends JavaFXComponent {
+  override val node: javafx.scene.layout.Pane = new javafx.scene.layout.Pane
+}
