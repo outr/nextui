@@ -17,6 +17,7 @@ trait JavaFXComponent extends Peer[javafx.scene.Node] {
     doubleBind(component.scale.x, impl.setScaleX, impl.scaleXProperty())
     doubleBind(component.scale.y, impl.setScaleY, impl.scaleYProperty())
     component.rotation.attach(impl.setRotate)
+    component.opacity.attach(impl.setOpacity)
     impl match {
       case region: javafx.scene.layout.Region => {
         if (component.width.pref.get.isEmpty && region.getPrefWidth > 0.0) {

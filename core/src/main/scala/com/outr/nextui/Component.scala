@@ -33,6 +33,7 @@ trait Component {
 
   val background: Sub[Color] = Sub(Color.Clear)
   val color: Sub[Color] = Sub(Color.Black)
+  val opacity: Sub[Double] = Sub(1.0)
 }
 
 class SizeElement {
