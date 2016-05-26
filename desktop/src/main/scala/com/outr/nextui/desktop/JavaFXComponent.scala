@@ -50,11 +50,24 @@ trait JavaFXComponent extends Peer {
     })
   }
 
-  protected def doubleBind(store: Var[Double], setter: Double => Unit, prop: ReadOnlyDoubleProperty, adjust: => Double = 0.0): Unit = {
+  protected def doubleBind(store: Var[Double],
+                           setter: Double => Unit,
+                           prop: ReadOnlyDoubleProperty,
+                           adjust: => Double = 0.0,
+                           silent: Boolean = false): Unit = {
     val changing = new AtomicBoolean(false)
-    store.attach { d =>
-      if (!changing.get()) {
-        setter(d + adjust)
+
+    if (silent) {
+      store.silentAttach { d =>
+        if (!changing.get()) {
+          setter(d + adjust)
+        }
+      }
+    } else {
+      store.attach { d =>
+        if (!changing.get()) {
+          setter(d + adjust)
+        }
       }
     }
     prop.addListener(new ChangeListener[Number] {

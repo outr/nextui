@@ -6,6 +6,8 @@ import javafx.stage.Stage
 
 import com.outr.nextui._
 
+import scala.language.postfixOps
+
 trait JavaFX extends JavaFXContainer with UIImplementation {
   this: UI =>
 
@@ -19,14 +21,16 @@ trait JavaFX extends JavaFXContainer with UIImplementation {
 
   def initialize(primaryStage: Stage, application: JavaFXApplication): Unit = {
     primaryStage.setTitle(title.get)
-    val scene = new Scene(node)
+    val scene = new Scene(node, width.pref.get, height.pref.get)
     primaryStage.setScene(scene)
     allChildren.map(_.peer).foreach {
       case jfx: JavaFXComponent => jfx.init()
       case c => throw new RuntimeException(s"Component peer is not a JavaFXComponent: $c.")
     }
-    doubleBind(width._actual, primaryStage.setWidth, primaryStage.widthProperty(), scene.getX * 2.0)
-    doubleBind(height._actual, primaryStage.setHeight, primaryStage.heightProperty(), scene.getY)
+    doubleBind(width.pref, primaryStage.setWidth, primaryStage.widthProperty(), scene.getX * 2.0, silent = true)
+    doubleBind(height.pref, primaryStage.setHeight, primaryStage.heightProperty(), scene.getY, silent = true)
+    width.pref.attach(width._actual :=)
+    height.pref.attach(height._actual :=)
 
     primaryStage.show()
   }
