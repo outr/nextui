@@ -36,7 +36,11 @@ trait JavaFX extends JavaFXContainer with UIImplementation with Logging {
       case jfx: JavaFXComponent => jfx.init()
       case c => throw new RuntimeException(s"Component peer is not a JavaFXComponent: $c.")
     }
-    val scene = new Scene(impl)
+    val scene = if (width.pref.get.nonEmpty && height.pref.get.nonEmpty) {
+      new Scene(impl, width.pref.get.get, height.pref.get.get)
+    } else {
+      new Scene(impl)
+    }
     primaryStage.setScene(scene)
 
     prefBind(width, primaryStage.setWidth, primaryStage.widthProperty(), scene.getX * 2.0)
@@ -51,7 +55,7 @@ trait JavaFX extends JavaFXContainer with UIImplementation with Logging {
                          adjust: => Double = 0.0): Unit = {
     val changing = new AtomicBoolean(false)
 
-    size.pref.attach {
+    size.pref.silentAttach {
       case Some(d) if !changing.get() => setter(d + adjust)
       case _ => // Ignore
     }
