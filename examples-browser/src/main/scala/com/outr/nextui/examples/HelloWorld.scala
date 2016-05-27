@@ -8,8 +8,8 @@ object HelloWorld extends UI with ScalaJS {
 
   children += new Button {
     text := "Say 'Hello World'"
-    center := HelloWorld.center
-    middle := HelloWorld.middle
+    center := ui.center
+    middle := ui.middle
 
     action.attach { evt =>
       logger.info(s"Hello World!")

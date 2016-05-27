@@ -10,11 +10,11 @@ object HelloWorld extends UI with JavaFX {
 
   children += new Button {
     text := "Say 'Hello World'"
-    center := HelloWorld.center
-    middle := HelloWorld.middle
+    center := ui.center
+    middle := ui.middle
 
     action.attach { evt =>
-      println("Hello World!")
+      logger.info("Hello World!")
     }
   }
 }
