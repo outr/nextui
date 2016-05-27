@@ -22,6 +22,9 @@ trait ScalaJS extends JSApp with ScalaJSContainer with UIImplementation with Log
       case c => throw new RuntimeException(s"Component peer is not a ScalaJSComponent: $c.")
     }
 
+    element.style.width = "100%"
+    element.style.height = "100%"
+
     width._actual := window.innerWidth.toDouble
     height._actual := window.innerHeight.toDouble
     window.addEventListener("resize", { (evt: Event) =>

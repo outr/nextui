@@ -1,6 +1,6 @@
 package com.outr.nextui
 
-import com.outr.nextui.util.HierarchicalIterator
+import org.powerscala.collection.HierarchicalIterator
 import pl.metastack.metarx.Sub
 
 trait UI extends Container {

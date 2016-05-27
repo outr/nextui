@@ -15,8 +15,9 @@ object NextUIBuild extends Build {
     scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature"),
     javaOptions += "-verbose:gc",
     resolvers ++= Seq(
-      "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
-      "Typesafe Repository" at "https://repo.typesafe.com/typesafe/releases/"
+      Resolver.sonatypeRepo("snapshots"),
+      Resolver.sonatypeRepo("releases"),
+      Resolver.typesafeRepo("releases")
     ),
     publishTo <<= version {
       (v: String) =>
@@ -63,6 +64,7 @@ object NextUIBuild extends Build {
     )
     .jsSettings(
       libraryDependencies ++= Seq(
+        powerscala.group %%% powerscala.core % powerscala.version,
         scalaJs.group %%% scalaJs.dom % scalaJs.version,
         metastack.group %%% metastack.rx % metastack.version,
         scribe.group %%% scribe.core % scribe.version,
@@ -72,6 +74,7 @@ object NextUIBuild extends Build {
     )
     .jvmSettings(
       libraryDependencies ++= Seq(
+        powerscala.group %% powerscala.core % powerscala.version,
         metastack.group %% metastack.rx % metastack.version,
         scribe.group %% scribe.core % scribe.version,
         scalaTest.group %% scalaTest.core % scalaTest.version % "test"
@@ -123,6 +126,12 @@ object Dependencies {
     val version = "0.1.8-SNAPSHOT"
 
     val rx = "metarx"
+  }
+  object powerscala {
+    val group = "org.powerscala"
+    val version = "2.0.2-SNAPSHOT"
+
+    val core = "powerscala-core"
   }
   object scalaJs {
     val group = "org.scala-js"
