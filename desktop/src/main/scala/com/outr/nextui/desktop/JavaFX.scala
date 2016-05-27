@@ -5,16 +5,17 @@ import javafx.scene.Scene
 import javafx.stage.Stage
 
 import com.outr.nextui._
+import com.outr.scribe.Logging
 
 import scala.language.postfixOps
 
-trait JavaFX extends JavaFXContainer with UIImplementation {
+trait JavaFX extends JavaFXContainer with UIImplementation with Logging {
   this: UI =>
 
   override def component: Component = this
 
   def main(args: Array[String]): Unit = {
-    println("Starting JavaFX...")
+    logger.info("Starting JavaFX...")
     JavaFXApplication.prepare(this)
     Application.launch(classOf[JavaFXApplication])
   }

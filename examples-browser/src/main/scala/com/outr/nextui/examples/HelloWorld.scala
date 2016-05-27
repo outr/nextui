@@ -1,14 +1,22 @@
 package com.outr.nextui.examples
 
-import org.scalajs.dom
-import org.scalajs.dom.document
+import com.outr.nextui.browser.ScalaJS
+import com.outr.nextui.{Button, UI}
 
-import scala.scalajs.js.JSApp
+object HelloWorld extends UI with ScalaJS {
+  title := "Hello World"
+  width.pref := 300.0
+  height.pref := 250.0
 
-object HelloWorld extends JSApp {
-  def main(): Unit = {
-    val button = document.createElement("button")
-    button.innerHTML = "Hello World!"
-    document.body.appendChild(button)
+  children += new Button {
+    text := "Say 'Hello World'"
+//    center := HelloWorld.center
+//    middle := HelloWorld.middle
+    x := HelloWorld.width.actual / 2.0
+    y := HelloWorld.height.actual / 2.0
+
+    action.attach { evt =>
+      println("Hello World!")
+    }
   }
 }
