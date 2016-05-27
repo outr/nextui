@@ -1,17 +1,18 @@
 package com.outr.nextui.browser
 
 import com.outr.nextui.{Button, Component, Peer, UI, UIImplementation}
+import com.outr.scribe.Logging
 import org.scalajs.dom.{Event, document, window}
 
 import scala.scalajs.js.JSApp
 
-trait ScalaJS extends JSApp with ScalaJSContainer with UIImplementation {
+trait ScalaJS extends JSApp with ScalaJSContainer with UIImplementation with Logging {
   this: UI =>
 
   override def component: Component = this
 
   def main(): Unit = {
-    println("Starting ScalaJS Application...")
+    logger.info("Starting ScalaJS Application...")
     initialize()
   }
 

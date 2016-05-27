@@ -124,22 +124,19 @@ object Dependencies {
 
     val rx = "metarx"
   }
-
   object scalaJs {
     val group = "org.scala-js"
     val version = "0.9.0"
 
     val dom = "scalajs-dom"
   }
-
   object scribe {
     val group = "com.outr.scribe"
-    val version = "1.2.2"
+    val version = "1.2.3-SNAPSHOT"
 
     val core = "scribe"
     val slf4j = "scribe-slf4j"
   }
-
   object scalaTest {
     val group = "org.scalatest"
     val version = "3.0.0-M16-SNAP4"
