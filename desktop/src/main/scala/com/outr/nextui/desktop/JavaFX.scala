@@ -12,7 +12,7 @@ import scala.language.postfixOps
 trait JavaFX extends JavaFXContainer with UIImplementation with Logging {
   this: UI =>
 
-  override def component: Component = this
+  override val component: Component = this
 
   def main(args: Array[String]): Unit = {
     logger.info("Starting JavaFX...")
@@ -22,12 +22,14 @@ trait JavaFX extends JavaFXContainer with UIImplementation with Logging {
 
   def initialize(primaryStage: Stage, application: JavaFXApplication): Unit = {
     primaryStage.setTitle(title.get)
-    val scene = new Scene(impl, width.pref.get, height.pref.get)
-    primaryStage.setScene(scene)
     allChildren.map(_.peer).foreach {
       case jfx: JavaFXComponent => jfx.init()
       case c => throw new RuntimeException(s"Component peer is not a JavaFXComponent: $c.")
     }
+    val scene = new Scene(impl, width.pref.get, height.pref.get)
+    primaryStage.setScene(scene)
+
+    // TODO: re-evaluate this section to keep proper bindings of `pref`
     doubleBind(width.pref, primaryStage.setWidth, primaryStage.widthProperty(), scene.getX * 2.0, silent = true)
     doubleBind(height.pref, primaryStage.setHeight, primaryStage.heightProperty(), scene.getY, silent = true)
     width.pref.attach(width._actual :=)
@@ -38,6 +40,7 @@ trait JavaFX extends JavaFXContainer with UIImplementation with Logging {
 
   override def peerFor(component: Component): Option[Peer[_]] = component match {
     case b: Button => Some(new JavaFXButton(b))
+    case i: Image => Some(new JavaFXImage(i))
     case fx: JavaFX => Some(fx)
     case _ => None
   }

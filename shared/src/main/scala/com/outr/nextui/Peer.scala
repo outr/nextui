@@ -1,8 +1,8 @@
 package com.outr.nextui
 
 trait Peer[I] {
-  def component: Component
-  def impl: I
+  val component: Component
+  val impl: I
 
   def init(): Unit
 }

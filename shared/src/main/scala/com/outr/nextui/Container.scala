@@ -3,7 +3,7 @@ package com.outr.nextui
 import pl.metastack.metarx.Buffer
 import pl.metastack.metarx.Buffer.Delta._
 
-trait Container extends Component {
+class Container extends Component {
   val children: Buffer[Component] = Buffer[Component]
 
   // Maintain Parent references for all children

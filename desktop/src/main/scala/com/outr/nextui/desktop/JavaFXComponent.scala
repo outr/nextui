@@ -7,7 +7,7 @@ import javafx.beans.value.{ChangeListener, ObservableValue}
 import com.outr.nextui.Peer
 import pl.metastack.metarx.Var
 
-trait JavaFXComponent extends Peer[javafx.scene.layout.Region] {
+trait JavaFXComponent extends Peer[javafx.scene.Node] {
   override def init(): Unit = {
     component.parent.attach {
       case Some(p) => {
@@ -16,25 +16,29 @@ trait JavaFXComponent extends Peer[javafx.scene.layout.Region] {
       case None => // No parent
     }
 
-    if (component.width.pref.get == 0.0) {
-      component.width.pref := impl.getPrefWidth
-    }
-    if (component.height.pref.get == 0.0) {
-      component.height.pref := impl.getPrefHeight
-    }
-
     component.x.attach(impl.setTranslateX)
     component.y.attach(impl.setTranslateY)
-    doubleBind(component.width.min, impl.setMinWidth, impl.minWidthProperty())
-    doubleBind(component.width.max, impl.setMaxWidth, impl.maxWidthProperty())
-    doubleBind(component.width.pref, impl.setPrefWidth, impl.prefWidthProperty())
-    doubleBind(component.height.min, impl.setMinHeight, impl.minHeightProperty())
-    doubleBind(component.height.max, impl.setMaxHeight, impl.maxHeightProperty())
-    doubleBind(component.height.pref, impl.setPrefHeight, impl.prefHeightProperty())
+    impl match {
+      case region: javafx.scene.layout.Region => {
+        if (component.width.pref.get == 0.0) {
+          component.width.pref := region.getPrefWidth
+        }
+        if (component.height.pref.get == 0.0) {
+          component.height.pref := region.getPrefHeight
+        }
+        doubleBind(component.width.min, region.setMinWidth, region.minWidthProperty())
+        doubleBind(component.width.max, region.setMaxWidth, region.maxWidthProperty())
+        doubleBind(component.width.pref, region.setPrefWidth, region.prefWidthProperty())
+        doubleBind(component.height.min, region.setMinHeight, region.minHeightProperty())
+        doubleBind(component.height.max, region.setMaxHeight, region.maxHeightProperty())
+        doubleBind(component.height.pref, region.setPrefHeight, region.prefHeightProperty())
 
-    if (!isInstanceOf[JavaFX]) {
-      doubleReversed(component.width._actual, impl.widthProperty())
-      doubleReversed(component.height._actual, impl.heightProperty())
+        if (!isInstanceOf[JavaFX]) {
+          doubleReversed(component.width._actual, region.widthProperty())
+          doubleReversed(component.height._actual, region.heightProperty())
+        }
+      }
+      case _ => // Not a region
     }
   }
 
