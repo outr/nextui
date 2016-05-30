@@ -3,8 +3,10 @@ package com.outr.nextui.desktop
 import java.util.concurrent.atomic.AtomicBoolean
 import javafx.beans.property.ReadOnlyDoubleProperty
 import javafx.beans.value.{ChangeListener, ObservableValue}
+import javafx.scene.layout.{Background, BackgroundFill}
 
 import com.outr.nextui.Peer
+import org.powerscala.Color
 import pl.metastack.metarx._
 
 trait JavaFXComponent extends Peer[javafx.scene.Node] {
@@ -15,9 +17,10 @@ trait JavaFXComponent extends Peer[javafx.scene.Node] {
       }
       case None => // No parent
     }
-
     component.x.attach(impl.setTranslateX)
     component.y.attach(impl.setTranslateY)
+    doubleBind(component.scale.x, impl.setScaleX, impl.scaleXProperty())
+    doubleBind(component.scale.y, impl.setScaleY, impl.scaleYProperty())
     impl match {
       case region: javafx.scene.layout.Region => {
         if (component.width.pref.get.isEmpty && region.getPrefWidth > 0.0) {
@@ -30,6 +33,15 @@ trait JavaFXComponent extends Peer[javafx.scene.Node] {
         doubleBind(component.width.max, region.setMaxWidth, region.maxWidthProperty())
         doubleBind(component.height.min, region.setMinHeight, region.minHeightProperty())
         doubleBind(component.height.max, region.setMaxHeight, region.maxHeightProperty())
+
+        component.background.attach { c =>
+          if (c != Color.Clear) {
+            val fill = new BackgroundFill(new javafx.scene.paint.Color(c.red, c.green, c.blue, c.alpha), null, null)
+            region.setBackground(new Background(fill))
+          } else {
+            region.setBackground(Background.EMPTY)
+          }
+        }
 
         if (!isInstanceOf[JavaFX]) {
           doubleBindOption(component.width.pref, region.setPrefWidth, region.prefWidthProperty())

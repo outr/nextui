@@ -1,5 +1,6 @@
 package com.outr.nextui
 
+import org.powerscala.Color
 import pl.metastack.metarx._
 
 trait Component {
@@ -21,6 +22,13 @@ trait Component {
   def top: Sub[Double] = y
   lazy val middle: Dep[Double, Double] = y.dep(_ + (height.actual / 2.0), _ - (height.actual / 2.0))
   lazy val bottom: Dep[Double, Double] = y.dep(_ + height.actual, _ - height.actual)
+
+  object scale {
+    val x: Sub[Double] = Sub(1.0)
+    val y: Sub[Double] = Sub(1.0)
+  }
+
+  val background: Sub[Color] = Sub(Color.Clear)
 }
 
 class SizeElement {
@@ -30,4 +38,7 @@ class SizeElement {
   val min: Sub[Double] = Sub(0.0)
   val max: Sub[Double] = Sub(Double.MaxValue)
   val pref: Sub[Option[Double]] = Sub(None)
+
+  def :=(d: Double): Unit = pref := Some(d)
+  def :=(subscriber: ReadChannel[Double]): Unit = pref := subscriber.map(d => Option(d))
 }

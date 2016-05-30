@@ -1,5 +1,6 @@
 package com.outr.nextui.desktop
 
+import java.net.URL
 import java.util.concurrent.atomic.AtomicBoolean
 import javafx.application.Application
 import javafx.beans.property.ReadOnlyDoubleProperty
@@ -11,12 +12,17 @@ import com.outr.nextui._
 import com.outr.nextui.model.{Image, ImagePeer, Resource, ResourcePeer}
 import com.outr.scribe.Logging
 
-import scala.language.postfixOps
+import scala.language.{implicitConversions, postfixOps}
 
 trait JavaFX extends JavaFXContainer with UIImplementation with Logging {
   this: UI =>
 
   override val component: Component = this
+
+  implicit def url2String(url: URL): String = url.toString
+  implicit def resource2Image(resource: Resource): Image = Image(resource.url)
+
+  def classLoader(path: String): Resource = Resource(getClass.getClassLoader.getResource(path).toString)
 
   def main(args: Array[String]): Unit = {
     logger.info("Starting JavaFX...")
@@ -69,6 +75,7 @@ trait JavaFX extends JavaFXContainer with UIImplementation with Logging {
     case b: Button => Some(new JavaFXButton(b))
     case i: ImageView => Some(new JavaFXImageView(i))
     case fx: JavaFX => Some(fx)
+    case c: Container => Some(JavaFXContainer(c))
     case _ => None
   }
   override def peerFor(resource: Resource): ResourcePeer = new JavaFXResource(resource)

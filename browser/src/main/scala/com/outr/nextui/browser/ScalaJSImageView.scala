@@ -10,7 +10,7 @@ class ScalaJSImageView(val component: ImageView) extends ScalaJSComponent {
   override def init(): Unit = {
     super.init()
 
-    component.src.attach {
+    component.image.attach {
       case Some(img) => impl.src = img.url.toString
       case None => impl.src = ""
     }

@@ -8,7 +8,13 @@ class JavaFXImageView(val component: ImageView) extends JavaFXComponent {
   override def init(): Unit = {
     super.init()
 
-    component.src.attach {
+    impl.setSmooth(true)
+
+    component.preserveAspectRatio.attach(impl.setPreserveRatio)
+    doubleBindOption(component.width.pref, impl.setFitWidth, impl.fitWidthProperty())
+    doubleBindOption(component.height.pref, impl.setFitHeight, impl.fitHeightProperty())
+
+    component.image.attach {
       case Some(image) => {
         val img = image.peer.asInstanceOf[javafx.scene.image.Image]
         component.width._actual := img.getWidth

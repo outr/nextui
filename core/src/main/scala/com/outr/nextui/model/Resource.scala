@@ -1,15 +1,9 @@
 package com.outr.nextui.model
 
-import java.net.URL
-
 import com.outr.nextui.UIImplementation
 
-case class Resource(url: URL) {
+case class Resource(url: String) {
   protected[nextui] lazy val peer: ResourcePeer = UIImplementation.peerFor(this)
-}
-
-object Resource {
-  def apply(url: String): Resource = apply(new URL(url))
 }
 
 trait ResourcePeer

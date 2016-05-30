@@ -3,7 +3,8 @@ package com.outr.nextui.examples
 import javafx.application.Application
 import javafx.scene.Scene
 import javafx.scene.image.{Image, ImageView}
-import javafx.scene.layout.Pane
+import javafx.scene.layout.{Background, BackgroundFill, Pane}
+import javafx.scene.paint.Color
 import javafx.stage.Stage
 
 object TestJavaFX {
@@ -17,6 +18,8 @@ class TestJavaFX extends Application {
     primaryStage.setTitle("Test JavaFX")
 
     val stackPane = new Pane
+    val fill = new BackgroundFill(Color.RED, null, null)
+    stackPane.setBackground(new Background(fill))
     val imgView = new ImageView()
     val img = new Image("tucker.jpg")
     imgView.setImage(img)
