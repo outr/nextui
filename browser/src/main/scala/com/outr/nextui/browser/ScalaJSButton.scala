@@ -11,8 +11,8 @@ class ScalaJSButton(val component: Button) extends ScalaJSComponent {
   override def init(): Unit = {
     super.init()
 
-    component.text.attach(s => impl.textContent = s)
     component.text.attach { s =>
+      impl.textContent = s
       updateSize()
     }
     impl.addEventListener("click", {(evt: Event) =>

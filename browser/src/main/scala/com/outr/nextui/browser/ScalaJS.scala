@@ -1,7 +1,9 @@
 package com.outr.nextui.browser
 
 import com.outr.nextui._
+import com.outr.nextui.model.{Image, ImagePeer, Resource, ResourcePeer}
 import com.outr.scribe.Logging
+import org.scalajs.dom.raw.HTMLImageElement
 import org.scalajs.dom.{Event, document, window}
 
 import scala.scalajs.js.JSApp
@@ -37,7 +39,19 @@ trait ScalaJS extends JSApp with ScalaJSContainer with UIImplementation with Log
 
   override def peerFor(component: Component): Option[Peer[_]] = component match {
     case b: Button => Some(new ScalaJSButton(b))
+    case i: ImageView => Some(new ScalaJSImageView(i))
     case js: ScalaJS => Some(js)
     case _ => None
   }
+
+  override def peerFor(resource: Resource): ResourcePeer = new ScalaJSResource(resource)
+
+  override def peerFor(image: Image): ImagePeer = new ScalaJSImage(image)
+}
+
+class ScalaJSResource(resource: Resource) extends ResourcePeer
+
+class ScalaJSImage(image: Image) extends ImagePeer {
+  val element = document.createElement("img").asInstanceOf[HTMLImageElement]
+  element.src = image.url.toString
 }
