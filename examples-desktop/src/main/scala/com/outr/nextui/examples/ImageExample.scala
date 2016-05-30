@@ -3,13 +3,13 @@ package com.outr.nextui.examples
 import java.net.URL
 
 import com.outr.nextui.desktop.JavaFX
-import com.outr.nextui.{Button, Image, UI}
+import com.outr.nextui.{Button, ImageView, UI}
 import pl.metastack.metarx._
 
 object ImageExample extends UI with JavaFX {
   title := "Image Example"
 
-  val image = new Image {
+  val image = new ImageView {
     src := Some(getClass.getClassLoader.getResource("tucker.jpg"))
 
     // Keep the image centered

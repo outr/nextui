@@ -1,8 +1,8 @@
 package com.outr.nextui.desktop
 
-import com.outr.nextui.Image
+import com.outr.nextui.ImageView
 
-class JavaFXImage(val component: Image) extends JavaFXComponent {
+class JavaFXImage(val component: ImageView) extends JavaFXComponent {
   override val impl: javafx.scene.image.ImageView = new javafx.scene.image.ImageView
 
   override def init(): Unit = {
