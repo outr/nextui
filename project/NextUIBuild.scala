@@ -56,7 +56,8 @@ object NextUIBuild extends Build {
     .aggregate(js, jvm, desktop, browser, examplesDesktop)
     .settings(sharedSettings(): _*)
     .settings(publishArtifact := false)
-  lazy val core = crossProject.in(file("."))
+  lazy val core = crossProject.crossType(CrossType.Pure).in(file("core"))
+    .settings(withCompatUnmanagedSources(jsJvmCrossProject = true, include_210Dir = false, includeTestSrcs = true): _*)
     .settings(sharedSettings(): _*)
     .settings(
       autoAPIMappings := true,
@@ -101,6 +102,34 @@ object NextUIBuild extends Build {
     .settings(sharedSettings(Some("examples-browser")))
     .enablePlugins(ScalaJSPlugin)
     .dependsOn(browser)
+
+  /**
+    * Helper function to add unmanaged source compat directories for different scala versions
+    */
+  private def withCompatUnmanagedSources(jsJvmCrossProject: Boolean, include_210Dir: Boolean, includeTestSrcs: Boolean): Seq[Setting[_]] = {
+    def compatDirs(projectbase: File, scalaVersion: String, isMain: Boolean) = {
+      val base = if (jsJvmCrossProject ) projectbase / ".." else projectbase
+      CrossVersion.partialVersion(scalaVersion) match {
+        case Some((2, scalaMajor)) if scalaMajor >= 11 => Seq(base / "compat" / "src" / (if (isMain) "main" else "test") / "scala-2.11").map(_.getCanonicalFile)
+        case Some((2, scalaMajor)) if scalaMajor == 10 && include_210Dir => Seq(base / "compat" / "src" / (if (isMain) "main" else "test") / "scala-2.10").map(_.getCanonicalFile)
+        case _ => Nil
+      }
+    }
+    val unmanagedMainDirsSetting = Seq(
+      unmanagedSourceDirectories in Compile ++= {
+        compatDirs(projectbase = baseDirectory.value, scalaVersion = scalaVersion.value, isMain = true)
+      }
+    )
+    if (includeTestSrcs) {
+      unmanagedMainDirsSetting ++ {
+        unmanagedSourceDirectories in Test ++= {
+          compatDirs(projectbase = baseDirectory.value, scalaVersion = scalaVersion.value, isMain = false)
+        }
+      }
+    } else {
+      unmanagedMainDirsSetting
+    }
+  }
 }
 
 object Details {
