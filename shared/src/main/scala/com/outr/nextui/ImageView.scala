@@ -1,9 +1,8 @@
 package com.outr.nextui
 
-import java.net.URL
-
+import com.outr.nextui.model.Image
 import pl.metastack.metarx.Sub
 
 class ImageView extends Component {
-  val src: Sub[Option[URL]] = Sub[Option[URL]](None)
+  val src: Sub[Option[Image]] = Sub[Option[Image]](None)
 }

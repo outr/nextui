@@ -8,6 +8,7 @@ import javafx.scene.Scene
 import javafx.stage.Stage
 
 import com.outr.nextui._
+import com.outr.nextui.model.{Image, ImagePeer, Resource, ResourcePeer}
 import com.outr.scribe.Logging
 
 import scala.language.postfixOps
@@ -66,11 +67,15 @@ trait JavaFX extends JavaFXContainer with UIImplementation with Logging {
 
   override def peerFor(component: Component): Option[Peer[_]] = component match {
     case b: Button => Some(new JavaFXButton(b))
-    case i: ImageView => Some(new JavaFXImage(i))
+    case i: ImageView => Some(new JavaFXImageView(i))
     case fx: JavaFX => Some(fx)
     case _ => None
   }
+  override def peerFor(resource: Resource): ResourcePeer = new JavaFXResource(resource)
+  override def peerFor(image: Image): ImagePeer = new javafx.scene.image.Image(image.url.toString) with ImagePeer
 }
+
+class JavaFXResource(resource: Resource) extends ResourcePeer
 
 class JavaFXApplication extends Application {
   override def start(primaryStage: Stage): Unit = {
