@@ -28,6 +28,7 @@ object NextUIBuild extends Build {
       scalaJSStage in Global := FastOptStage
     )
     .jvmSettings(
+      javaOptions += "-verbose:gc",
       libraryDependencies ++= Seq(
         powerscala.group %% powerscala.core % powerscala.version,
         metastack.group %% metastack.rx % metastack.version,
@@ -64,7 +65,6 @@ object NextUIBuild extends Build {
     scalaVersion := Details.scalaVersion,
     sbtVersion := Details.sbtVersion,
     scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature"),
-    javaOptions += "-verbose:gc",
     resolvers ++= Seq(
       Resolver.sonatypeRepo("snapshots"),
       Resolver.sonatypeRepo("releases"),
