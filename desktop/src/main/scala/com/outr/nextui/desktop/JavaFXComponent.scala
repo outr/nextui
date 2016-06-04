@@ -11,12 +11,6 @@ import pl.metastack.metarx._
 
 trait JavaFXComponent extends Peer[javafx.scene.Node] {
   override def initialize(): Unit = {
-//    component.parent.attach {
-//      case Some(p) => {
-//        p.peer.asInstanceOf[JavaFXContainer].impl.getChildren.add(impl)
-//      }
-//      case None => // No parent
-//    }
     component.visible.attach(impl.setVisible)
     component.x.attach(impl.setTranslateX)
     component.y.attach(impl.setTranslateY)
