@@ -1,6 +1,6 @@
 package com.outr.nextui.examples
 
-import com.outr.nextui.desktop.JavaFX
+import com.outr.nextui.desktop._
 import com.outr.nextui.{ImageView, UI, VirtualMode, VirtualSizeSupport}
 
 object VirtualSizeExample extends UI with JavaFX with VirtualSizeSupport {

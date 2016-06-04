@@ -1,7 +1,7 @@
 package com.outr.nextui.examples
 
 import com.outr.nextui._
-import com.outr.nextui.desktop.JavaFX
+import com.outr.nextui.desktop._
 import com.outr.nextui.transition.easing.Easing
 
 object EasingExample extends UI with JavaFX {

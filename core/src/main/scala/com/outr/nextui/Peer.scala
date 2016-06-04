@@ -4,5 +4,14 @@ trait Peer[I] {
   val component: Component
   val impl: I
 
-  def init(): Unit
+  private var _initialized = false
+  final def initialized: Boolean = _initialized
+
+  final def init(): Unit = synchronized {
+    if (!initialized) {
+      initialize()
+      _initialized = true
+    }
+  }
+  protected def initialize(): Unit
 }

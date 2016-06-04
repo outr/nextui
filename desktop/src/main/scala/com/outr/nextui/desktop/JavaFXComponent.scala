@@ -10,13 +10,14 @@ import org.powerscala.Color
 import pl.metastack.metarx._
 
 trait JavaFXComponent extends Peer[javafx.scene.Node] {
-  override def init(): Unit = {
-    component.parent.attach {
-      case Some(p) => {
-        p.peer.asInstanceOf[JavaFXContainer].impl.getChildren.add(impl)
-      }
-      case None => // No parent
-    }
+  override def initialize(): Unit = {
+//    component.parent.attach {
+//      case Some(p) => {
+//        p.peer.asInstanceOf[JavaFXContainer].impl.getChildren.add(impl)
+//      }
+//      case None => // No parent
+//    }
+    component.visible.attach(impl.setVisible)
     component.x.attach(impl.setTranslateX)
     component.y.attach(impl.setTranslateY)
     doubleBind(component.scale.x, impl.setScaleX, impl.scaleXProperty())
@@ -39,8 +40,8 @@ trait JavaFXComponent extends Peer[javafx.scene.Node] {
           if (c != Color.Clear) {
             val fill = new BackgroundFill(new javafx.scene.paint.Color(c.red, c.green, c.blue, c.alpha), null, null)
             region.setBackground(new Background(fill))
-          } else {
-            region.setBackground(Background.EMPTY)
+          } else if (region.getBackground != null) {
+            region.setBackground(null)
           }
         }
 

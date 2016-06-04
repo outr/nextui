@@ -10,6 +10,7 @@ trait Component {
 
   def parent: ReadStateChannel[Option[Container]] = _parent
 
+  val visible: Sub[Boolean] = Sub(true)
   val x: Sub[Double] = Sub(0.0)
   val y: Sub[Double] = Sub(0.0)
   val width: SizeElement = new SizeElement

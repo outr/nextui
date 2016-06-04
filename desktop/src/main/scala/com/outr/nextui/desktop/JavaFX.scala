@@ -25,8 +25,6 @@ trait JavaFX extends JavaFXContainer with UIImplementation with Logging {
   implicit def url2String(url: URL): String = url.toString
   implicit def resource2Image(resource: Resource): Image = Image(resource.url)
 
-  def classLoader(path: String): Resource = Resource(getClass.getClassLoader.getResource(path).toString)
-
   def main(args: Array[String]): Unit = {
     logger.info("Starting JavaFX...")
     JavaFXApplication.prepare(this)

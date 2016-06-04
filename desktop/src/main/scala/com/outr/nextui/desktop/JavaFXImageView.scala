@@ -5,8 +5,8 @@ import com.outr.nextui.ImageView
 class JavaFXImageView(val component: ImageView) extends JavaFXComponent {
   override val impl: javafx.scene.image.ImageView = new javafx.scene.image.ImageView
 
-  override def init(): Unit = {
-    super.init()
+  override def initialize(): Unit = {
+    super.initialize()
 
 //    impl.setSmooth(true)
 
