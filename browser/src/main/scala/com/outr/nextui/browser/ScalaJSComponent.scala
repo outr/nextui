@@ -6,7 +6,8 @@ import org.scalajs.dom._
 import org.scalajs.dom.html.Element
 
 trait ScalaJSComponent extends Peer[Element] {
-  override def init(): Unit = {
+  override def initialize(): Unit = {
+    // TODO: update to work more like JavaFX on JavaFXContainer
     component.parent.attach {
       case Some(p) => {
         p.peer.asInstanceOf[ScalaJSContainer].impl.appendChild(impl)

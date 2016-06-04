@@ -15,10 +15,10 @@ trait ScalaJS extends JSApp with ScalaJSContainer with UIImplementation with Log
 
   def main(): Unit = {
     logger.info("Starting ScalaJS Application...")
-    initialize()
+    start()
   }
 
-  def initialize(): Unit = {
+  def start(): Unit = {
     allChildren.map(_.peer).foreach {
       case sjs: ScalaJSComponent => sjs.init()
       case c => throw new RuntimeException(s"Component peer is not a ScalaJSComponent: $c.")

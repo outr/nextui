@@ -8,8 +8,8 @@ import org.scalajs.dom.raw.HTMLButtonElement
 class ScalaJSButton(val component: Button) extends ScalaJSComponent {
   override val impl: HTMLButtonElement = create[HTMLButtonElement]("button")
 
-  override def init(): Unit = {
-    super.init()
+  override def initialize(): Unit = {
+    super.initialize()
 
     component.text.attach { s =>
       impl.textContent = s
