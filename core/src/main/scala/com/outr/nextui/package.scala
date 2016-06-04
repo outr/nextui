@@ -1,6 +1,8 @@
 package com.outr
 
 package object nextui {
+  def ui: UI = UI()
+
   implicit class IntTimes(i: Int) {
     def millis: Double = i.toDouble / 1000.0
     def milliseconds: Double = i.toDouble / 1000.0

@@ -34,7 +34,10 @@ trait JavaFX extends JavaFXContainer with UIImplementation with Logging {
   }
 
   def initialize(primaryStage: Stage, application: JavaFXApplication): Unit = {
-    primaryStage.setTitle(title.get)
+    title.attach(primaryStage.setTitle)
+    fullScreen.attach(primaryStage.setFullScreen)
+    fullScreenExitHint.attach(h => primaryStage.setFullScreenExitHint(h.orNull))
+    primaryStage.setFullScreenExitHint("")
     allChildren.map(_.peer).foreach {
       case jfx: JavaFXComponent => jfx.init()
       case c => throw new RuntimeException(s"Component peer is not a JavaFXComponent: $c.")

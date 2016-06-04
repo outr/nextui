@@ -70,14 +70,6 @@ object NextUIBuild extends Build {
       Resolver.sonatypeRepo("releases"),
       Resolver.typesafeRepo("releases")
     ),
-    publishTo <<= version {
-      (v: String) =>
-        val nexus = "https://oss.sonatype.org/"
-        if (v.trim.endsWith("SNAPSHOT"))
-          Some("snapshots" at nexus + "content/repositories/snapshots")
-        else
-          Some("releases" at nexus + "service/local/staging/deploy/maven2")
-    },
     addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full),
     libraryDependencies <+= scalaVersion("org.scala-lang" % "scala-reflect" % _),
     publishArtifact in Test := false,
@@ -170,7 +162,7 @@ object Dependencies {
   }
   object scribe {
     val group = "com.outr.scribe"
-    val version = "1.2.3-SNAPSHOT"
+    val version = "1.2.3"
 
     val core = "scribe"
     val slf4j = "scribe-slf4j"

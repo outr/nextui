@@ -27,6 +27,10 @@ trait ScalaJS extends JSApp with ScalaJSContainer with UIImplementation with Log
     impl.style.width = "100%"
     impl.style.height = "100%"
 
+    title.attach(t => document.title = t)
+    fullScreen.attach { fs =>
+      if (fs) logger.warn(s"Fullscreen not yet supported in Scala.js implementation.")
+    }
     width._actual := window.innerWidth.toDouble
     height._actual := window.innerHeight.toDouble
     window.addEventListener("resize", { (evt: Event) =>

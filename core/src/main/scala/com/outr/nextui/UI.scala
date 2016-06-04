@@ -5,7 +5,11 @@ import pl.metastack.metarx.{ReadChannel, Sub}
 
 trait UI extends Container {
   val title: Sub[String] = Sub("")
+  val fullScreen: Sub[Boolean] = Sub(false)
+  val fullScreenExitHint: Sub[Option[String]] = Sub(None)
   def ui: UI = this
+
+  UI.instance = Some(this)
 
   /**
     * The rate at which the update method is called. How this is managed is implementation specific.
@@ -42,6 +46,14 @@ trait UI extends Container {
     def pcth: ReadChannel[Double] = (d / 100.0) * height.actual
     def pct: Percent = Percent(d)
   }
+}
+
+object UI {
+  private var instance: Option[UI] = None
+
+  def apply(): UI = instance.get
+
+  def get(): Option[UI] = instance
 }
 
 case class Percent(pct: Double) {
