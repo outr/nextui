@@ -1,5 +1,7 @@
 package com.outr.nextui.examples
 
+import com.outr.nextui.{Button, UI}
+
 object HelloWorld extends UI {
   title := "Hello World"
   width.pref := 300.0
@@ -13,9 +15,5 @@ object HelloWorld extends UI {
     action.attach { evt =>
       logger.info("Hello World!")
     }
-  }
-
-  def main(args: Array[String]): Unit = {
-    JavaFX(this)
   }
 }

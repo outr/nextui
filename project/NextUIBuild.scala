@@ -7,7 +7,7 @@ object NextUIBuild extends Build {
   import Dependencies._
 
   lazy val root = project.in(file("."))
-    .aggregate(js, jvm, desktop, browser, examplesDesktop)
+    .aggregate(coreJs, coreJvm, desktop, browser, examplesJs, examplesJvm)
     .settings(sharedSettings(): _*)
     .settings(publishArtifact := false)
   lazy val core = crossProject.crossType(CrossType.Pure).in(file("core"))
@@ -36,27 +36,29 @@ object NextUIBuild extends Build {
         scalaTest.group %% scalaTest.core % scalaTest.version % "test"
       )
     )
-  lazy val js = core.js
-  lazy val jvm = core.jvm
+  lazy val coreJs = core.js
+  lazy val coreJvm = core.jvm
 
   // Platforms
   lazy val desktop = project.in(file("desktop"))
     .settings(sharedSettings(Some("desktop")))
-    .dependsOn(jvm)
+    .dependsOn(coreJvm)
   lazy val browser = project.in(file("browser"))
     .settings(sharedSettings(Some("browser")))
     .enablePlugins(ScalaJSPlugin)
-    .dependsOn(js)
+    .dependsOn(coreJs)
 
   // Samples / Examples
-  lazy val examplesDesktop = project.in(file("examples-desktop"))
-    .settings(sharedSettings(Some("examples-desktop")))
-    .settings(fork := true)
-    .dependsOn(desktop)
-  lazy val examplesBrowser = project.in(file("examples-browser"))
-    .settings(sharedSettings(Some("examples-browser")))
-    .enablePlugins(ScalaJSPlugin)
-    .dependsOn(browser)
+  lazy val examples = crossProject.crossType(CrossType.Pure).in(file("examples"))
+    .dependsOn(core)
+    .settings(withCompatUnmanagedSources(jsJvmCrossProject = true, include_210Dir = false, includeTestSrcs = true): _*)
+    .settings(sharedSettings(Some("examples")): _*)
+    .settings(
+      autoAPIMappings := true,
+      apiMappings += (scalaInstance.value.libraryJar -> url(s"http://www.scala-lang.org/api/${scalaVersion.value}/"))
+    )
+  lazy val examplesJs = examples.js.dependsOn(browser).enablePlugins(ScalaJSPlugin)
+  lazy val examplesJvm = examples.jvm.dependsOn(desktop).settings(fork := true)
 
   def sharedSettings(projectName: Option[String] = None) = Seq(
     name := s"${Details.name}${projectName.map(pn => s"-$pn").getOrElse("")}",

@@ -2,9 +2,7 @@ package com.outr.nextui
 
 import pl.metastack.metarx._
 
-trait VirtualSizeSupport {
-  def component: Component
-
+trait VirtualSizeSupport extends Component {
   val virtualWidth: Sub[Double] = Sub(1024.0)
   val virtualHeight: Sub[Double] = Sub(768.0)
   val virtualMode: Sub[VirtualMode] = Sub(VirtualMode.Bars)
@@ -36,7 +34,7 @@ object VirtualMode {
 }
 
 class VirtualSize(screen: VirtualSizeSupport) {
-  private def c = screen.component
+  private def c = screen
 
   private val _xOffset = Sub(0.0)
   private val _yOffset = Sub(0.0)

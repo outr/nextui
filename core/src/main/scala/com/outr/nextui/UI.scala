@@ -1,9 +1,10 @@
 package com.outr.nextui
 
+import com.outr.scribe.Logging
 import org.powerscala.collection.HierarchicalIterator
 import pl.metastack.metarx.{ReadChannel, Sub}
 
-trait UI extends Container {
+trait UI extends Container with Logging {
   val title: Sub[String] = Sub("")
   val fullScreen: Sub[Boolean] = Sub(false)
   val fullScreenExitHint: Sub[Option[String]] = Sub(None)

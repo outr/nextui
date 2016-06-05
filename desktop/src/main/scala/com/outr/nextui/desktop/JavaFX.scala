@@ -18,9 +18,9 @@ import com.outr.scribe.Logging
 import scala.language.{implicitConversions, postfixOps}
 
 trait JavaFX extends JavaFXContainer with UIImplementation with Logging {
-  this: UI =>
+  def ui: UI
 
-  override val component: Component = this
+  override val component: Component = ui
 
   implicit def url2String(url: URL): String = url.toString
   implicit def resource2Image(resource: Resource): Image = Image(resource.url)
@@ -32,32 +32,32 @@ trait JavaFX extends JavaFXContainer with UIImplementation with Logging {
   }
 
   def initialize(primaryStage: Stage, application: JavaFXApplication): Unit = {
-    title.attach(primaryStage.setTitle)
-    fullScreen.attach(primaryStage.setFullScreen)
-    fullScreenExitHint.attach(h => primaryStage.setFullScreenExitHint(h.orNull))
+    ui.title.attach(primaryStage.setTitle)
+    ui.fullScreen.attach(primaryStage.setFullScreen)
+    ui.fullScreenExitHint.attach(h => primaryStage.setFullScreenExitHint(h.orNull))
     primaryStage.setFullScreenExitHint("")
-    allChildren.map(_.peer).foreach {
+    ui.allChildren.map(_.peer).foreach {
       case jfx: JavaFXComponent => jfx.init()
       case c => throw new RuntimeException(s"Component peer is not a JavaFXComponent: $c.")
     }
-    val scene = if (width.pref.get.nonEmpty && height.pref.get.nonEmpty) {
-      new Scene(impl, width.pref.get.get, height.pref.get.get)
+    val scene = if (ui.width.pref.get.nonEmpty && ui.height.pref.get.nonEmpty) {
+      new Scene(impl, ui.width.pref.get.get, ui.height.pref.get.get)
     } else {
       new Scene(impl)
     }
     primaryStage.setScene(scene)
 
-    prefBind(width, primaryStage.setWidth, primaryStage.widthProperty(), scene.getX * 2.0)
-    prefBind(height, primaryStage.setHeight, primaryStage.heightProperty(), scene.getY)
+    prefBind(ui.width, primaryStage.setWidth, primaryStage.widthProperty(), scene.getX * 2.0)
+    prefBind(ui.height, primaryStage.setHeight, primaryStage.heightProperty(), scene.getY)
 
-    val delay = math.round((1.0 / updateFPS) * 1000.0)
+    val delay = math.round((1.0 / ui.updateFPS) * 1000.0)
     val timeline = new Timeline(new KeyFrame(Duration.millis(delay), new EventHandler[ActionEvent] {
       var previous = System.currentTimeMillis()
 
       override def handle(event: ActionEvent): Unit = {
         val current = System.currentTimeMillis()
         val delta = (current - previous) / 1000.0
-        update(delta)
+        ui.update(delta)
         previous = current
       }
     }))
@@ -96,20 +96,29 @@ trait JavaFX extends JavaFXContainer with UIImplementation with Logging {
   override def peerFor(component: Component): Option[Peer[_]] = component match {
     case b: Button => Some(new JavaFXButton(b))
     case i: ImageView => Some(new JavaFXImageView(i))
-    case fx: JavaFX => Some(fx)
+    case ui: UI => Some(this)
     case c: Container => Some(JavaFXContainer(c))
     case _ => None
   }
   override def peerFor(resource: Resource): ResourcePeer = new JavaFXResource(resource)
-  override def peerFor(image: Image): ImagePeer = new javafx.scene.image.Image(image.url.toString) with ImagePeer
+
+  override def peerFor(image: Image): ImagePeer = new javafx.scene.image.Image(image.resource.url) with ImagePeer
 }
 
-class JavaFXResource(resource: Resource) extends ResourcePeer
+class JavaFXResource(resource: Resource) extends ResourcePeer {
+  lazy val url: String = resource.path match {
+    case s if s.contains("://") => s
+    case s => {
+      println(s"Looking up in classloader: $s")
+      getClass.getClassLoader.getResource(s).toString
+    }
+  }
+}
 
 class JavaFXApplication extends Application {
   override def start(primaryStage: Stage): Unit = {
-    val ui = JavaFXApplication.use()
-    ui.initialize(primaryStage, this)
+    val app = JavaFXApplication.use()
+    app.initialize(primaryStage, this)
   }
 }
 
@@ -131,5 +140,17 @@ object JavaFXApplication {
       case Some(existing) => throw new RuntimeException(s"Cannot define multiple UIs before initialization. Already defined: $existing, Trying to define: $ui.")
       case None => instance = Some(ui)
     }
+  }
+}
+
+object JavaFX {
+  def apply(userInterface: UI, start: Boolean = true): JavaFX = {
+    val jfx = new JavaFX {
+      def ui: UI = userInterface
+    }
+    if (start) {
+      jfx.main(Array.empty)
+    }
+    jfx
   }
 }
