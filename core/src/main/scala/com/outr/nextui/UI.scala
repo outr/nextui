@@ -9,6 +9,7 @@ trait UI extends Container with Logging {
   val fullScreen: Sub[Boolean] = Sub(false)
   val fullScreenExitHint: Sub[Option[String]] = Sub(None)
   def ui: UI = this
+  lazy val name: String = getClass.getSimpleName.replaceAll("[$]", "")
 
   UI.instance = Some(this)
 

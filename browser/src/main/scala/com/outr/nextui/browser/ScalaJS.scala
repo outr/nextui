@@ -63,9 +63,11 @@ trait ScalaJS extends JSApp with ScalaJSContainer with UIImplementation with Log
   override def peerFor(image: Image): ImagePeer = new ScalaJSImage(image)
 }
 
-class ScalaJSResource(resource: Resource) extends ResourcePeer
+class ScalaJSResource(resource: Resource) extends ResourcePeer {
+  lazy val url: String = resource.path
+}
 
 class ScalaJSImage(image: Image) extends ImagePeer {
   val element = document.createElement("img").asInstanceOf[HTMLImageElement]
-  element.src = image.url.toString
+  element.src = image.resource.url.toString
 }

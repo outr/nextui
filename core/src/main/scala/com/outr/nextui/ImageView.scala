@@ -8,6 +8,6 @@ class ImageView extends Component {
   val preserveAspectRatio: Sub[Boolean] = Sub(true)
 
   object src {
-    def :=(resource: Resource): Unit = image := Some(Image(resource.url))
+    def :=(resource: Resource): Unit = image := Some(Image(resource))
   }
 }

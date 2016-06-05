@@ -11,7 +11,7 @@ class ScalaJSImageView(val component: ImageView) extends ScalaJSComponent {
     super.initialize()
 
     component.image.attach {
-      case Some(img) => impl.src = img.url.toString
+      case Some(img) => impl.src = img.resource.url.toString
       case None => impl.src = ""
     }
 

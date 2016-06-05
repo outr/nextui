@@ -58,7 +58,7 @@ object NextUIBuild extends Build {
       apiMappings += (scalaInstance.value.libraryJar -> url(s"http://www.scala-lang.org/api/${scalaVersion.value}/"))
     )
   lazy val examplesJs = examples.js.dependsOn(browser).enablePlugins(ScalaJSPlugin)
-  lazy val examplesJvm = examples.jvm.dependsOn(desktop).settings(fork := true)
+  lazy val examplesJvm = examples.jvm.dependsOn(desktop).settings(fork := true, connectInput in run := true)
 
   def sharedSettings(projectName: Option[String] = None) = Seq(
     name := s"${Details.name}${projectName.map(pn => s"-$pn").getOrElse("")}",
