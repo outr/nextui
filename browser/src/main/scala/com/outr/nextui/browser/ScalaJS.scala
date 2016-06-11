@@ -54,6 +54,7 @@ trait ScalaJS extends JSApp with ScalaJSContainer with UIImplementation with Log
   override def peerFor(component: Component): Option[Peer[_]] = component match {
     case b: Button => Some(new ScalaJSButton(b))
     case i: ImageView => Some(new ScalaJSImageView(i))
+    case l: Label => Some(new ScalaJSLabel(l))
     case ui: UI => Some(this)
     case c: Container => Some(ScalaJSContainer(c))
     case _ => None
