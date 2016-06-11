@@ -7,14 +7,6 @@ import org.scalajs.dom.html.Element
 
 trait ScalaJSComponent extends Peer[Element] {
   override def initialize(): Unit = {
-    // TODO: update to work more like JavaFX on JavaFXContainer
-    component.parent.attach {
-      case Some(p) => {
-        p.peer.asInstanceOf[ScalaJSContainer].impl.appendChild(impl)
-      }
-      case None => // No Parent
-    }
-
     if (component.width.pref.get.isEmpty && impl.offsetWidth > 0.0) {
       component.width.pref := Option(impl.offsetWidth)
     }
