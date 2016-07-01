@@ -39,14 +39,17 @@ trait ScalaJS extends JSApp with ScalaJSContainer with UIImplementation with Log
       ui.height._actual := window.innerHeight.toDouble
     }, true)
 
-    val delay = (1.0 / ui.updateFPS) * 1000.0
     var previous = System.currentTimeMillis()
-    window.setInterval(() => {
+    var updateFunction: Double => Unit = null
+    updateFunction = (timestamp: Double) => {
       val current = System.currentTimeMillis()
       val delta = (current - previous) / 1000.0
       ui.update(delta)
       previous = current
-    }, delay)
+      ui.update(delta)
+      window.requestAnimationFrame(updateFunction)
+    }
+    window.requestAnimationFrame(updateFunction)
 
     document.body.appendChild(impl)
   }
