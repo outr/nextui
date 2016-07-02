@@ -7,7 +7,7 @@ trait Transition {
   def init(): Unit
   def invoke(delta: Double): Unit
 
-  def start() = {
+  def start()(implicit ui: UI) = {
     var first = true
     ui.updates.until(finished) { delta =>
       if (first) {

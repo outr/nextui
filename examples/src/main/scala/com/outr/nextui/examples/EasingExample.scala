@@ -15,15 +15,17 @@ object EasingExample extends UI {
     position.middle := ui.position.middle
   }
 
-  import com.outr.nextui.transition._
+  override def init(): Unit = {
+    import com.outr.nextui.transition._
 
-  forever(
-    image.position.x transitionTo 0.0 in 1.seconds easing Easing.BounceOut
-      andThen(image.position.right transitionTo ui.position.right.get in 1.seconds easing Easing.SineIn)
-      andThen(image.position.center transitionTo ui.position.center.get in 1.seconds easing Easing.ElasticOut)
-      andThen(image.rotation transitionTo -360.0 in 2.seconds easing Easing.ElasticOut)
-      andThen function(image.rotation := 0.0)
-  ).start()
+    forever(
+      image.position.x transitionTo 0.0 in 1.seconds easing Easing.BounceOut
+        andThen (image.position.right transitionTo ui.position.right.get in 1.seconds easing Easing.SineIn)
+        andThen (image.position.center transitionTo ui.position.center.get in 1.seconds easing Easing.ElasticOut)
+        andThen (image.rotation transitionTo -360.0 in 2.seconds easing Easing.ElasticOut)
+        andThen function(image.rotation := 0.0)
+    ).start()
 
-  children += image
+    children += image
+  }
 }

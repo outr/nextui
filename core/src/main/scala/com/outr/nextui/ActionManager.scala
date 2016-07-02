@@ -1,26 +1,39 @@
 package com.outr.nextui
 
-import java.util.concurrent.atomic.AtomicReference
-
 import scala.collection.mutable.ListBuffer
 
-class ActionManager(name: String) {
+class ActionManager {
   private val queue = ListBuffer.empty[Action]
 
   def on(f: => Unit): Action = synchronized {
-    val a = new Action((d: Double) => f, once = false)
+    val a = new Action {
+      override def exec(delta: Double): Boolean = {
+        f
+        true
+      }
+    }
     queue += a
     a
   }
 
   def apply(f: Double => Unit): Action = synchronized {
-    val a = new Action(f, once = false)
+    val a = new Action {
+      override def exec(delta: Double): Boolean = {
+        f(delta)
+        true
+      }
+    }
     queue += a
     a
   }
 
   def once(f: => Unit): Action = synchronized {
-    val a = new Action((d: Double) => f, once = true)
+    val a = new Action {
+      override def exec(delta: Double): Boolean = {
+        f
+        false
+      }
+    }
     queue += a
     a
   }
@@ -61,17 +74,12 @@ class ActionManager(name: String) {
   }
 
   def exec(delta: Double): Unit = synchronized {
-    ActionManager.current.set(name)
-    try {
-      queue.foreach(action => execAction(delta, action))
-    } finally {
-      ActionManager.current.set("")
-    }
+    queue.foreach(action => execAction(delta, action))
   }
 
   private val execAction = (delta: Double, action: Action) => {
-    action.invoke(delta)
-    if (action.once) {
+    val survive = action.exec(delta)
+    if (!survive) {
       queue -= action
     }
   }
@@ -79,13 +87,21 @@ class ActionManager(name: String) {
   def nonEmpty: Boolean = queue.nonEmpty
   def isEmpty: Boolean = queue.isEmpty
 
-  def clear(): Unit = queue.clear()
+  def clear(): Unit = {
+    println("Clearing!")
+    queue.clear()
+  }
 }
 
-class Action(f: (Double) => Unit, val once: Boolean) {
-  def invoke(delta: Double): Unit = f(delta)
-}
-
-object ActionManager {
-  private val current = new AtomicReference[String]("")
+/**
+  * Actions are invoked on ActionManager.
+  */
+trait Action {
+  /**
+    * Executes the action and returns true if the action should continue to run (false removes it from further execution)
+    *
+    * @param delta the time in seconds since the last update
+    * @return true if the action should continue to live
+    */
+  def exec(delta: Double): Boolean
 }

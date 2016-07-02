@@ -9,9 +9,7 @@ trait UI extends Container with Logging {
   val title: Sub[String] = Sub(name)
   val fullScreen: Sub[Boolean] = Sub(false)
   val fullScreenExitHint: Sub[Option[String]] = Sub(None)
-  def ui: UI = this
-
-  UI.instance = Some(this)
+  implicit def ui: UI = this
 
   /**
     * The rate at which the update method is called. How this is managed is implementation specific.
@@ -20,7 +18,7 @@ trait UI extends Container with Logging {
   /**
     * Supports injecting actions into the update queue.
     */
-  val updates = new ActionManager("updates")
+  lazy val updates = new ActionManager
 
   /**
     * Updates via the implementation at the rate defined in `updateFPS`.
@@ -29,6 +27,12 @@ trait UI extends Container with Logging {
     */
   def update(delta: Double): Unit = {
     updates.exec(delta)
+  }
+
+  /**
+    * Initialization called by implementation when ready to show.
+    */
+  def init(): Unit = {
   }
 
   def allChildren: Iterator[Component] = new HierarchicalIterator[Component](this, {
@@ -48,14 +52,6 @@ trait UI extends Container with Logging {
     def pcth: ReadChannel[Double] = (d / 100.0) * size.height.actual
     def pct: Percent = Percent(d)
   }
-}
-
-object UI {
-  private var instance: Option[UI] = None
-
-  def apply(): UI = instance.get
-
-  def get(): Option[UI] = instance
 }
 
 case class Percent(pct: Double) {

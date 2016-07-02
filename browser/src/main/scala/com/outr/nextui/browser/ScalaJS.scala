@@ -51,6 +51,8 @@ trait ScalaJS extends JSApp with ScalaJSContainer with UIImplementation with Log
     }
     window.requestAnimationFrame(updateFunction)
 
+    ui.init()
+
     document.body.appendChild(impl)
   }
 

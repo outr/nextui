@@ -1,10 +1,10 @@
 package com.outr.nextui.screen
 
-import com.outr.nextui.Container
+import com.outr.nextui.{Container, UI}
 import com.outr.nextui.transition._
 import pl.metastack.metarx.{ReadStateChannel, Sub, Var}
 
-class Screen extends Container {
+class Screen(implicit ui: UI) extends Container {
   private[screen] val _status = Var[ScreenStatus](ScreenStatus.Removed)
   val status: ReadStateChannel[ScreenStatus] = _status
   val transitionIn: Sub[Option[Transition]] = Sub(None)

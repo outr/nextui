@@ -35,7 +35,7 @@ object ScreensExample extends UI {
   screens.active := Some(MainScreen)
 }
 
-object MainScreen extends Screen {
+object MainScreen extends Screen()(ScreensExample) {
   background := Color.CadetBlue
 
   children += new ImageView {
@@ -46,7 +46,7 @@ object MainScreen extends Screen {
   }
 }
 
-object OtherScreen extends Screen {
+object OtherScreen extends Screen()(ScreensExample) {
   children += new ImageView {
     src := Resource("1024.jpg")
 

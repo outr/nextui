@@ -64,6 +64,8 @@ trait JavaFX extends JavaFXContainer with UIImplementation with Logging {
     timeline.setCycleCount(Animation.INDEFINITE)
     timeline.play()
 
+    ui.init()
+
     primaryStage.show()
   }
 

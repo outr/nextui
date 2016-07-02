@@ -3,7 +3,7 @@ package com.outr.nextui.screen
 import com.outr.nextui._
 import pl.metastack.metarx.Sub
 
-class Screens extends Container {
+class Screens(implicit ui: UI) extends Container {
   val active: Sub[Option[Screen]] = Sub(None)
 
   // Default to the size of the UI
