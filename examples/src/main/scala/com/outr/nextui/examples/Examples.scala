@@ -10,7 +10,8 @@ object Examples {
     ImageExample,
     LabelExample,
     ScreensExample,
-    VirtualSizeExample
+    VirtualSizeExample,
+    AddRemoveExample
   )
 
   def apply(): Vector[UI] = examples
