@@ -4,6 +4,8 @@ import com.outr.nextui.model.Resource
 import com.outr.nextui.{Button, ImageView, UI}
 import com.outr.scribe.Logging
 
+import pl.metastack.metarx._
+
 object AddRemoveExample extends UI with Logging {
   size.width := 800
   size.height := 600
@@ -11,13 +13,7 @@ object AddRemoveExample extends UI with Logging {
   val image1 = new ImageView {
     src := Resource("sgine.png")
     position.right := ui.position.right - 50.0
-    position.top := ui.position.top - 50.0
-    size.width.actual.attach { d=>
-      logger.info(s"Width: $d")
-    }
-    size.height.actual.attach { d =>
-      logger.info(s"Height: $d")
-    }
+    position.top := ui.position.top + 50.0
   }
 
   children += new Button {
