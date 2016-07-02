@@ -28,7 +28,10 @@ trait ScalaJSContainer extends ScalaJSComponent {
         impl.replaceChild(e, replace.reference.peer.asInstanceOf[ScalaJSComponent].impl)
         replace.element.peer.init()
       }
-      case remove: Remove[Component] => impl.parentElement.removeChild(impl)
+      case remove: Remove[Component] => {
+        val e = remove.element.peer.asInstanceOf[ScalaJSComponent].impl
+        impl.removeChild(e)
+      }
     }
   }
 }
