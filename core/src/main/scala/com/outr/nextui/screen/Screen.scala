@@ -11,8 +11,8 @@ class Screen extends Container {
   val transitionOut: Sub[Option[Transition]] = Sub(None)
 
   protected[screen] def activate(screens: Screens): Unit = {
-    width := screens.width.actual
-    height := screens.height.actual
+    size.width := screens.size.width.actual
+    size.height := screens.size.height.actual
     if (!screens.children.get.contains(this)) {
       screens.children += this
     }

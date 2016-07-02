@@ -8,19 +8,19 @@ import org.powerscala.Color
 
 object ScreensExample extends UI {
   title := "Screens Example"
-  width := 1024.0
-  height := 868.0
+  size.width := 1024.0
+  size.height := 868.0
 
   background := Color.Azure
 
-  MainScreen.transitionOut := Some(MainScreen.right transitionTo 0.0 in 2.seconds)
-  OtherScreen.transitionIn := Some(function(OtherScreen.left := ui.width.actual) andThen(OtherScreen.left transitionTo 0.0 in 2.seconds))
+  MainScreen.transitionOut := Some(MainScreen.position.right transitionTo 0.0 in 2.seconds)
+  OtherScreen.transitionIn := Some(function(OtherScreen.position.left := ui.size.width.actual) andThen(OtherScreen.position.left transitionTo 0.0 in 2.seconds))
 
   children += new Button {
     text := "Change Screens"
 
-    right := ui.right - 50.0
-    middle := ui.height.actual - 50.0
+    position.right := ui.position.right - 50.0
+    position.middle := ui.size.height.actual - 50.0
 
     action.attach { evt =>
       screens.active := (if (screens.active.get.contains(MainScreen)) Some(OtherScreen) else Some(MainScreen))
@@ -29,7 +29,7 @@ object ScreensExample extends UI {
 
   // Set up our screens container
   val screens = new Screens
-  screens.height := ui.height.actual - 100.0
+  screens.size.height := ui.size.height.actual - 100.0
   children += screens
 
   screens.active := Some(MainScreen)
@@ -41,8 +41,8 @@ object MainScreen extends Screen {
   children += new ImageView {
     src := Resource("sgine.png")
 
-    center := MainScreen.center
-    middle := MainScreen.middle
+    position.center := MainScreen.position.center
+    position.middle := MainScreen.position.middle
   }
 }
 
@@ -50,7 +50,7 @@ object OtherScreen extends Screen {
   children += new ImageView {
     src := Resource("1024.jpg")
 
-    center := OtherScreen.center
-    middle := OtherScreen.middle
+    position.center := OtherScreen.position.center
+    position.middle := OtherScreen.position.middle
   }
 }

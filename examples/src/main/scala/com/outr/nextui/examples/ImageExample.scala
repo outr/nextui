@@ -13,18 +13,18 @@ object ImageExample extends UI {
     image := img1
 
     // Keep the image centered
-    center := ui.center
-    middle := ui.middle
+    position.center := ui.position.center
+    position.middle := ui.position.middle
 
     // Default the window size to be the size of the image when it loads
-    ui.width.pref := width.actual.map(d => Option(d))
-    ui.height.pref := height.actual.map(d => Option(d))
+    ui.size.width.pref := size.width.actual.map(d => Option(d))
+    ui.size.height.pref := size.height.actual.map(d => Option(d))
   }
   val button = new Button {
     text := "Toggle Image"
 
-    right := ui.right - 50.0
-    bottom := ui.bottom - 50.0
+    position.right := ui.position.right - 50.0
+    position.bottom := ui.position.bottom - 50.0
 
     action.attach { evt =>
       if (imageView.image.get.contains(img1)) {

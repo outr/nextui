@@ -10,10 +10,10 @@ object VirtualSizeExample extends UI with VirtualSizeSupport {
 
   children += new ImageView {
     src := Resource("1024.jpg")
-    x := 0.0.vx
-    y := 0.0.vy
-    width := 1024.0.vw
-    height := 768.0.vh
+    position.x := 0.0.vx
+    position.y := 0.0.vy
+    size.width := 1024.0.vw
+    size.height := 768.0.vh
     preserveAspectRatio := false
   }
 }

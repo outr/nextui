@@ -11,18 +11,24 @@ trait Component {
   def parent: ReadStateChannel[Option[Container]] = _parent
 
   val visible: Sub[Boolean] = Sub(true)
-  val x: Sub[Double] = Sub(0.0)
-  val y: Sub[Double] = Sub(0.0)
-  val width: SizeElement = new SizeElement
-  val height: SizeElement = new SizeElement
 
-  def left: Sub[Double] = x
-  lazy val center: Dep[Double, Double] = x.dep(_ + (width.actual / 2.0), _ - (width.actual / 2.0))
-  lazy val right: Dep[Double, Double] = x.dep(_ + width.actual, _ - width.actual)
+  object size {
+    val width: SizeElement = new SizeElement
+    val height: SizeElement = new SizeElement
+  }
 
-  def top: Sub[Double] = y
-  lazy val middle: Dep[Double, Double] = y.dep(_ + (height.actual / 2.0), _ - (height.actual / 2.0))
-  lazy val bottom: Dep[Double, Double] = y.dep(_ + height.actual, _ - height.actual)
+  object position {
+    val x: Sub[Double] = Sub(0.0)
+    val y: Sub[Double] = Sub(0.0)
+
+    def left: Sub[Double] = x
+    lazy val center: Dep[Double, Double] = x.dep(_ + (size.width.actual / 2.0), _ - (size.width.actual / 2.0))
+    lazy val right: Dep[Double, Double] = x.dep(_ + size.width.actual, _ - size.width.actual)
+
+    def top: Sub[Double] = y
+    lazy val middle: Dep[Double, Double] = y.dep(_ + (size.height.actual / 2.0), _ - (size.height.actual / 2.0))
+    lazy val bottom: Dep[Double, Double] = y.dep(_ + size.height.actual, _ - size.height.actual)
+  }
 
   object scale {
     val x: Sub[Double] = Sub(1.0)

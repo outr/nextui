@@ -11,19 +11,19 @@ class JavaFXImageView(val component: ImageView) extends JavaFXComponent {
 //    impl.setSmooth(true)
 
     component.preserveAspectRatio.attach(impl.setPreserveRatio)
-    doubleBindOption(component.width.pref, impl.setFitWidth, impl.fitWidthProperty())
-    doubleBindOption(component.height.pref, impl.setFitHeight, impl.fitHeightProperty())
+    doubleBindOption(component.size.width.pref, impl.setFitWidth, impl.fitWidthProperty())
+    doubleBindOption(component.size.height.pref, impl.setFitHeight, impl.fitHeightProperty())
 
     component.image.attach {
       case Some(image) => {
         val img = image.peer.asInstanceOf[javafx.scene.image.Image]
-        component.width._actual := img.getWidth
-        component.height._actual := img.getHeight
+        component.size.width._actual := img.getWidth
+        component.size.height._actual := img.getHeight
         impl.setImage(img)
       }
       case None => {
-        component.width._actual := 0.0
-        component.height._actual := 0.0
+        component.size.width._actual := 0.0
+        component.size.height._actual := 0.0
         impl.setImage(None.orNull)
       }
     }

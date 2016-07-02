@@ -6,21 +6,21 @@ import com.outr.nextui.transition.easing.Easing
 
 object EasingExample extends UI {
   title := "Easings Example"
-  width := 800.0
-  height := 600.0
+  size.width := 800.0
+  size.height := 600.0
 
   val image = new ImageView {
     src := Resource("sgine.png")
-    center := ui.center
-    middle := ui.middle
+    position.center := ui.position.center
+    position.middle := ui.position.middle
   }
 
   import com.outr.nextui.transition._
 
   forever(
-    image.x transitionTo 0.0 in 1.seconds easing Easing.BounceOut
-      andThen(image.right transitionTo ui.right.get in 1.seconds easing Easing.SineIn)
-      andThen(image.center transitionTo ui.center.get in 1.seconds easing Easing.ElasticOut)
+    image.position.x transitionTo 0.0 in 1.seconds easing Easing.BounceOut
+      andThen(image.position.right transitionTo ui.position.right.get in 1.seconds easing Easing.SineIn)
+      andThen(image.position.center transitionTo ui.position.center.get in 1.seconds easing Easing.ElasticOut)
       andThen(image.rotation transitionTo -360.0 in 2.seconds easing Easing.ElasticOut)
       andThen function(image.rotation := 0.0)
   ).start()

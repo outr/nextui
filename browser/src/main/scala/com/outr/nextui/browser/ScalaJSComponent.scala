@@ -7,28 +7,28 @@ import org.scalajs.dom.html.Element
 
 trait ScalaJSComponent extends Peer[Element] {
   override def initialize(): Unit = {
-    if (component.width.pref.get.isEmpty && impl.offsetWidth > 0.0) {
-      component.width.pref := Option(impl.offsetWidth)
+    if (component.size.width.pref.get.isEmpty && impl.offsetWidth > 0.0) {
+      component.size.width.pref := Option(impl.offsetWidth)
     }
-    if (component.height.pref.get.isEmpty && impl.offsetHeight > 0.0) {
-      component.height.pref := Option(impl.offsetHeight)
+    if (component.size.height.pref.get.isEmpty && impl.offsetHeight > 0.0) {
+      component.size.height.pref := Option(impl.offsetHeight)
     }
 
-    component.x.attach(d => impl.style.left = s"${d}px")
-    component.y.attach(d => impl.style.top = s"${d}px")
+    component.position.x.attach(d => impl.style.left = s"${d}px")
+    component.position.y.attach(d => impl.style.top = s"${d}px")
     component.rotation.attach(d => impl.style.transform = s"rotate(${d}deg)")
     updateSize()
-    component.width.pref.attach {
+    component.size.width.pref.attach {
       case Some(d) => {
         impl.style.width = s"${d}px"
-        component.width._actual := d
+        component.size.width._actual := d
       }
       case None => // Ignore
     }
-    component.height.pref.attach {
+    component.size.height.pref.attach {
       case Some(d) => {
         impl.style.height = s"${d}px"
-        component.height._actual := d
+        component.size.height._actual := d
       }
       case None => // Ignore
     }
@@ -50,11 +50,11 @@ trait ScalaJSComponent extends Peer[Element] {
   }
 
   private val updateFunction = () => {
-    if (impl.offsetWidth != component.width.actual.get) {
-      component.width._actual := impl.offsetWidth
+    if (impl.offsetWidth != component.size.width.actual.get) {
+      component.size.width._actual := impl.offsetWidth
     }
-    if (impl.offsetHeight != component.height.actual.get) {
-      component.height._actual := impl.offsetHeight
+    if (impl.offsetHeight != component.size.height.actual.get) {
+      component.size.height._actual := impl.offsetHeight
     }
   }
   def updateSize(delayed: Boolean = true): Unit = if (delayed) {

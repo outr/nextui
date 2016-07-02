@@ -45,11 +45,11 @@ class VirtualSize(screen: VirtualSizeSupport) {
   val wMulti: ReadStateChannel[Double] = _wMulti
   val hMulti: ReadStateChannel[Double] = _hMulti
 
-  private val updateFunction = (d: Double) => if (c.width.actual.get > 0.0 && c.height.actual.get > 0.0) {
+  private val updateFunction = (d: Double) => if (c.size.width.actual.get > 0.0 && c.size.height.actual.get > 0.0) {
     screen.virtualMode.get match {
       case VirtualMode.Bars | VirtualMode.Clip => {
-        val widthRatio = c.width.actual.get / screen.virtualWidth.get
-        val heightRatio = c.height.actual.get / screen.virtualHeight.get
+        val widthRatio = c.size.width.actual.get / screen.virtualWidth.get
+        val heightRatio = c.size.height.actual.get / screen.virtualHeight.get
         val ratio = screen.virtualMode.get match {
           case VirtualMode.Bars => math.min(widthRatio, heightRatio)
           case VirtualMode.Clip => math.max(widthRatio, heightRatio)
@@ -57,22 +57,22 @@ class VirtualSize(screen: VirtualSizeSupport) {
         }
         val w = screen.virtualWidth * ratio
         val h = screen.virtualHeight * ratio
-        _xOffset := (c.width.actual.get - w) / 2.0
-        _yOffset := (c.height.actual.get - h) / 2.0
+        _xOffset := (c.size.width.actual.get - w) / 2.0
+        _yOffset := (c.size.height.actual.get - h) / 2.0
         _wMulti := ratio
         _hMulti := ratio
       }
       case VirtualMode.Stretch => {
         _xOffset := 0.0
         _yOffset := 0.0
-        _wMulti := c.width.actual / screen.virtualWidth
-        _hMulti := c.height.actual / screen.virtualHeight
+        _wMulti := c.size.width.actual / screen.virtualWidth
+        _hMulti := c.size.height.actual / screen.virtualHeight
       }
     }
   }
 
-  c.width.actual.attach(updateFunction)
-  c.height.actual.attach(updateFunction)
+  c.size.width.actual.attach(updateFunction)
+  c.size.height.actual.attach(updateFunction)
   screen.virtualWidth.attach(updateFunction)
   screen.virtualHeight.attach(updateFunction)
   screen.virtualMode.attach { mode =>

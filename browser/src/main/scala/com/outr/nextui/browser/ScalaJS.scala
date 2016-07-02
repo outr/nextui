@@ -32,11 +32,11 @@ trait ScalaJS extends JSApp with ScalaJSContainer with UIImplementation with Log
     ui.fullScreen.attach { fs =>
       if (fs) logger.warn(s"Fullscreen not yet supported in Scala.js implementation.")
     }
-    ui.width._actual := window.innerWidth.toDouble
-    ui.height._actual := window.innerHeight.toDouble
+    ui.size.width._actual := window.innerWidth.toDouble
+    ui.size.height._actual := window.innerHeight.toDouble
     window.addEventListener("resize", { (evt: Event) =>
-      ui.width._actual := window.innerWidth.toDouble
-      ui.height._actual := window.innerHeight.toDouble
+      ui.size.width._actual := window.innerWidth.toDouble
+      ui.size.height._actual := window.innerHeight.toDouble
     }, true)
 
     var previous = System.currentTimeMillis()

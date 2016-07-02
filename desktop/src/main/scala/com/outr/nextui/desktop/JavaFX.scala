@@ -40,15 +40,15 @@ trait JavaFX extends JavaFXContainer with UIImplementation with Logging {
       case jfx: JavaFXComponent => jfx.init()
       case c => throw new RuntimeException(s"Component peer is not a JavaFXComponent: $c.")
     }
-    val scene = if (ui.width.pref.get.nonEmpty && ui.height.pref.get.nonEmpty) {
-      new Scene(impl, ui.width.pref.get.get, ui.height.pref.get.get)
+    val scene = if (ui.size.width.pref.get.nonEmpty && ui.size.height.pref.get.nonEmpty) {
+      new Scene(impl, ui.size.width.pref.get.get, ui.size.height.pref.get.get)
     } else {
       new Scene(impl)
     }
     primaryStage.setScene(scene)
 
-    prefBind(ui.width, primaryStage.setWidth, primaryStage.widthProperty(), scene.getX * 2.0)
-    prefBind(ui.height, primaryStage.setHeight, primaryStage.heightProperty(), scene.getY)
+    prefBind(ui.size.width, primaryStage.setWidth, primaryStage.widthProperty(), scene.getX * 2.0)
+    prefBind(ui.size.height, primaryStage.setHeight, primaryStage.heightProperty(), scene.getY)
 
     val delay = math.round((1.0 / ui.updateFPS) * 1000.0)
     val timeline = new Timeline(new KeyFrame(Duration.millis(delay), new EventHandler[ActionEvent] {

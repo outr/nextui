@@ -38,14 +38,14 @@ trait UI extends Container with Logging {
 
   implicit class IntSize(i: Int) {
     def px: Double = i.toDouble
-    def pctw: ReadChannel[Double] = (i.toDouble / 100.0) * width.actual
-    def pcth: ReadChannel[Double] = (i.toDouble / 100.0) * height.actual
+    def pctw: ReadChannel[Double] = (i.toDouble / 100.0) * size.width.actual
+    def pcth: ReadChannel[Double] = (i.toDouble / 100.0) * size.height.actual
     def pct: Percent = Percent(i.toDouble)
   }
   implicit class DoubleSize(d: Double) {
     def px: Double = d
-    def pctw: ReadChannel[Double] = (d / 100.0) * width.actual
-    def pcth: ReadChannel[Double] = (d / 100.0) * height.actual
+    def pctw: ReadChannel[Double] = (d / 100.0) * size.width.actual
+    def pcth: ReadChannel[Double] = (d / 100.0) * size.height.actual
     def pct: Percent = Percent(d)
   }
 }

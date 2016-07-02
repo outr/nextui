@@ -7,8 +7,8 @@ class Screens extends Container {
   val active: Sub[Option[Screen]] = Sub(None)
 
   // Default to the size of the UI
-  width := ui.width.actual
-  height := ui.height.actual
+  size.width := ui.size.width.actual
+  size.height := ui.size.height.actual
 
   active.attach { screenOption =>
     children.get.foreach {
