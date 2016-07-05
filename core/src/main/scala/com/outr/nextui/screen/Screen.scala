@@ -18,7 +18,7 @@ class Screen(implicit ui: UI) extends Container {
     }
     _status := ScreenStatus.TransitioningIn
     transitionIn.get match {
-      case Some(t) => t.andThen(function(_status := ScreenStatus.Active)).start()
+      case Some(t) => function(visible := true).andThen(t.andThen(function(_status := ScreenStatus.Active))).start()
       case None => {
         visible := true
         _status := ScreenStatus.Active
