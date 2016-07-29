@@ -6,6 +6,8 @@ import pl.metastack.metarx._
 
 object ImageExample extends UI {
   title := "Image Example"
+  size.width := 1024
+  size.height := 768
 
   lazy val img1 = Image(Resource("tucker.jpg"))
   lazy val img2 = Image("https://img.buzzfeed.com/buzzfeed-static/static/2014-07/28/10/enhanced/webdr11/enhanced-12094-1406557546-35.jpg")

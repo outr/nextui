@@ -152,13 +152,13 @@ object Dependencies {
   }
   object powerscala {
     val group = "org.powerscala"
-    val version = "2.0.2-SNAPSHOT"
+    val version = "2.0.2"
 
     val core = "powerscala-core"
   }
   object scalaJs {
     val group = "org.scala-js"
-    val version = "0.9.0"
+    val version = "0.9.1"
 
     val dom = "scalajs-dom"
   }
