@@ -1,5 +1,7 @@
 package com.outr.nextui.desktop
 
+import javafx.geometry.Rectangle2D
+
 import com.outr.nextui.ImageView
 
 class JavaFXImageView(val component: ImageView) extends JavaFXComponent {
@@ -27,5 +29,19 @@ class JavaFXImageView(val component: ImageView) extends JavaFXComponent {
         impl.setImage(None.orNull)
       }
     }
+
+    component.clip.x1.attach(updateClipping)
+    component.clip.y1.attach(updateClipping)
+    component.clip.x2.attach(updateClipping)
+    component.clip.y2.attach(updateClipping)
+  }
+
+  private def updateClipping(value: Option[Double]): Unit = {
+    val minX = component.clip.x1.get.getOrElse(0.0)
+    val minY = component.clip.y1.get.getOrElse(0.0)
+    val width = component.clip.x2.get.getOrElse(component.size.width.actual.get) - minX
+    val height = component.clip.y2.get.getOrElse(component.size.height.actual.get) - minY
+    val rect = new Rectangle2D(minX, minY, width, height)
+    impl.setViewport(rect)
   }
 }

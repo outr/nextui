@@ -13,13 +13,13 @@ package object transition {
 
   implicit class Transitions(sub: Sub[Double]) {
     def transitionTo(to: => Double): TransitionTo = {
-      new TransitionTo((d: Double) => sub := d, () => sub.get, () => to)
+      TransitionTo((d: Double) => sub := d, () => sub.get, () => to)
     }
   }
 
   implicit class DepTransitions(dep: Dep[Double, Double]) {
     def transitionTo(to: => Double): TransitionTo = {
-      new TransitionTo((d: Double) => dep := d, () => dep.get, () => to)
+      TransitionTo((d: Double) => dep := d, () => dep.get, () => to)
     }
   }
 }
