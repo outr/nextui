@@ -4,7 +4,7 @@ import com.outr.nextui.model.{Image, Resource}
 import pl.metastack.metarx.Sub
 
 class ImageView extends Component {
-  val image: Sub[Option[Image]] = Sub[Option[Image]](None)
+  val image: Sub[Image] = Sub[Image](Image.Empty)
   val preserveAspectRatio: Sub[Boolean] = Sub(true)
   object clip {
     val x1: Sub[Option[Double]] = Sub(None)
@@ -14,6 +14,6 @@ class ImageView extends Component {
   }
 
   object src {
-    def :=(resource: Resource): Unit = image := Some(Image(resource))
+    def :=(resource: Resource): Unit = image := Image(resource)
   }
 }

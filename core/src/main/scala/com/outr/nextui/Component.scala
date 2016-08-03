@@ -8,6 +8,20 @@ trait Component {
 
   protected[nextui] val _parent = Var[Option[Container]](None)
 
+  /**
+    * Supports injecting actions into the update queue.
+    */
+  lazy val updates = new ActionManager
+
+  /**
+    * Updates via the implementation at the rate defined in `updateFPS`.
+    *
+    * @param delta the time delay in seconds since the last update.
+    */
+  def update(delta: Double): Unit = {
+    updates.exec(delta)
+  }
+
   def parent: ReadStateChannel[Option[Container]] = _parent
 
   val visible: Sub[Boolean] = Sub(true)

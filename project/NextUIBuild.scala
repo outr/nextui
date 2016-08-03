@@ -67,6 +67,7 @@ object NextUIBuild extends Build {
     scalaVersion := Details.scalaVersion,
     sbtVersion := Details.sbtVersion,
     scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature"),
+    javaOptions += "-verbose:gc",
     resolvers ++= Seq(
       Resolver.sonatypeRepo("snapshots"),
       Resolver.sonatypeRepo("releases"),

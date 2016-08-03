@@ -29,7 +29,7 @@ object ImageExample extends UI {
     position.bottom := ui.position.bottom - 50.0
 
     action.attach { evt =>
-      if (imageView.image.get.contains(img1)) {
+      if (imageView.image.get == img1) {
         imageView.image := img2
       } else {
         imageView.image := img1

@@ -17,4 +17,10 @@ class Container extends Component {
     removed.foreach(_._parent := None)
     added.foreach(_._parent := p)
   }
+
+  override def update(delta: Double): Unit = {
+    super.update(delta)
+
+    children.foreach(_.update(delta))
+  }
 }

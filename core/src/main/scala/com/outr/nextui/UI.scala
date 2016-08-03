@@ -2,9 +2,11 @@ package com.outr.nextui
 
 import com.outr.scribe.Logging
 import org.powerscala.collection.HierarchicalIterator
-import pl.metastack.metarx.{ReadChannel, Sub}
+import pl.metastack.metarx.{Channel, ReadChannel, Sub}
 
 trait UI extends Container with Logging {
+  Channel.ValidateCyclical = false
+
   lazy val name: String = getClass.getSimpleName.replaceAll("[$]", "")
   val title: Sub[String] = Sub(name)
   val fullScreen: Sub[Boolean] = Sub(false)
@@ -15,19 +17,6 @@ trait UI extends Container with Logging {
     * The rate at which the update method is called. How this is managed is implementation specific.
     */
   val updateFPS: Int = 60
-  /**
-    * Supports injecting actions into the update queue.
-    */
-  lazy val updates = new ActionManager
-
-  /**
-    * Updates via the implementation at the rate defined in `updateFPS`.
-    *
-    * @param delta the time delay in seconds since the last update.
-    */
-  def update(delta: Double): Unit = {
-    updates.exec(delta)
-  }
 
   /**
     * Initialization called by implementation when ready to show.

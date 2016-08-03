@@ -11,7 +11,8 @@ object Examples {
     LabelExample,
     ScreensExample,
     VirtualSizeExample,
-    AddRemoveExample
+    AddRemoveExample,
+    AnimationExample
   )
 
   def apply(): Vector[UI] = examples

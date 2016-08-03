@@ -9,6 +9,8 @@ class Resource(protected[nextui] val path: String) {
 }
 
 object Resource {
+  val Empty: Resource = new Resource("")
+
   def apply(path: String): Resource = new Resource(path)
 }
 
