@@ -5,6 +5,19 @@ import com.outr.scribe.Logging
 import pl.metastack.metarx.Sub
 
 class Animation extends ImageView with Logging {
+  def this(resource: Resource,
+           frameWidth: Int,
+           frameHeight: Int,
+           frameTotal: Int = -1,
+           frameRate: Double = 0.1) = {
+    this()
+    frame.width := frameWidth
+    frame.height := frameHeight
+    frame.total := frameTotal
+    frame.rate := frameRate
+    image := Image(resource)
+  }
+
   object frame {
     val width: Sub[Int] = Sub(-1)
     val height: Sub[Int] = Sub(-1)
@@ -54,21 +67,5 @@ class Animation extends ImageView with Logging {
 
   image.attach { img =>
     logger.info(s"Image: ${img.width}x${img.height}")
-  }
-}
-
-object Animation {
-  def apply(resource: Resource,
-            frameWidth: Int,
-            frameHeight: Int,
-            frameTotal: Int = -1,
-            frameRate: Double = 0.1): Animation = {
-    val a = new Animation
-    a.frame.width := frameWidth
-    a.frame.height := frameHeight
-    a.frame.total := frameTotal
-    a.frame.rate := frameRate
-    a.image := Image(resource)
-    a
   }
 }

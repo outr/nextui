@@ -8,6 +8,6 @@ object AnimationExample extends UI {
   size.width := 1024
   size.height := 768
 
-  val animation = Animation(Resource("animation.png"), 144, 144, frameRate = 0.05)
+  val animation = new Animation(Resource("animation.png"), 144, 144, frameRate = 0.05)
   children += animation
 }
